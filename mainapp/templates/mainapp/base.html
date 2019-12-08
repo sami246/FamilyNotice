@@ -1,0 +1,107 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FamilyNotice</title>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+	 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+</head>
+<style>
+	.BlockContent{
+		max-width: 75%;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 3%;
+	}
+
+	@keyframes blinker {
+    from {opacity: 1.0;}
+    to {opacity: 0.0;}
+  }
+
+.blink {
+    text-decoration: blink;
+    animation-name: blinker;
+    animation-duration: 0.6s;
+    animation-iteration-count:infinite;
+    animation-timing-function:ease-in-out;
+    animation-direction: alternate;
+  }
+
+	#item_pic{
+		width: 15vw;
+	}
+
+	#itemlist{
+		display: grid;
+		grid-column-gap: 5vw;
+		padding: 3vw;
+		grid-template-columns:
+			auto auto auto;
+		grid-template-areas:
+			'itemCatalogue itemCatalogue itemCatalogue';
+
+   }
+
+	 .ItemCat{
+		 		grid-area: itemCatalogue;
+	      background-color: red;
+	  }
+</style>
+<body>
+      <!-- NAVIGAATION BAR -->
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="">FamilyNotice</a>
+          </div>
+          <!-- NAV BAR LEFT -->
+          <ul class="nav navbar-nav">
+            <li><a href="">Closed Auction</a></li>
+						<li><a href="">Post a new Item</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <!-- SEARCH -->
+            <!-- <form class="navbar-form navbar-left" action="">
+							CHANGE TO USE AJAX LATER
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="search">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <i class="glyphicon glyphicon-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form> -->
+            <!-- END OF SEARCH -->
+            <!-- SIGN UP -->
+						{% if user.is_authenticated %}
+						<li><a><span class="glyphicon"></span> {{user}}</a></li>
+					 	<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout </a></li>
+					 	{% else %}
+					 	<li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
+					 	<!-- LOGIN -->
+					 	<li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+					 	{% endif %}
+          </ul>
+        </div>
+      </nav>
+  <br>
+	<br>
+	{% block content %}
+	{% endblock %}
+  {% block scripts %}{% endblock %}
+	<br>
+	{% block footer %}
+		<script type="text/javascript" src="{% static "javascript/main.js" %}"></script>
+	{% endblock %}
+</body>
+</html>

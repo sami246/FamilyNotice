@@ -1,0 +1,14 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+    <div class='BlockContent'>
+
+     <h3>Please enter your details to login</h3>
+     <form role="form" action = "{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+          <button class="btn btn-success loginButton">Log in</button>
+      </form>
+
+    </div>
+{% endblock %}
