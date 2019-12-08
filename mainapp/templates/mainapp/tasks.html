@@ -1,0 +1,35 @@
+{% extends "mainapp/base.html" %}
+
+
+
+{% block content %}
+
+
+    <div class='BlockContent'>
+
+     <h1>Task lists</h1>
+     <div class= "taskcontainer">
+         <div class = "taskleft">
+           <ul class="Task_list">
+             {% for task in tasks %}
+
+              <ul id="" class="">
+                <!-- <img src="{{item.pic}}"> -->
+                <div class="">
+                  <p> {{task.fields.name}} </p>
+                  <!-- <div id="timerCountdown">Time Left: </div> -->
+                </div>
+              </ul>
+              {% endfor %}
+           </ul>
+         </div>
+         <div class = "taskright">
+           <h3> Add Task: </h3>
+           <ul class=""> </ul>
+
+         </div>
+     </div>
+
+
+    </div>
+{% endblock %}

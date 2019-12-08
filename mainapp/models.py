@@ -18,11 +18,9 @@ class Member(models.Model):
 
 class Task(models.Model):
 	name = models.CharField(max_length=30)
-	assignTo = models.ForeignKey(Member,
-	 on_delete= models.CASCADE,
-	 null=True, related_name='assign_to', blank=True)
+	assignTaskTo = models.ForeignKey(Member, on_delete= models.CASCADE, null=True, related_name='assign_task_to', blank=True)
 	date = models.DateTimeField()
-	description = models.TextField()
+	description = models.TextField(null=True, blank=True)
 	completed = models.BooleanField(default = False)
 
 	def __str__(self):
@@ -30,7 +28,7 @@ class Task(models.Model):
 
 class List(models.Model):
 	nameOfList = models.CharField(max_length=30)
-	task = models.ManyToManyField(Task)
+	task = models.ManyToManyField(Task, blank=True)
 
 	def __str__(self):
 		# name = self.nameofFamily
@@ -66,8 +64,7 @@ class Chores(models.Model):
 	#May change to enum LATER and then even later add API
 	description = models.TextField()
 	dueBy = models.DateTimeField()
-	assignTo = models.ForeignKey(Member, on_delete= models.CASCADE,
-	 null=True, related_name='assign_to', blank=True)
+	assignChoreTo = models.ForeignKey(Member, on_delete= models.CASCADE, null=True, related_name='assign_chore_to', blank=True)
 	completed = models.BooleanField(default = False)
 
 

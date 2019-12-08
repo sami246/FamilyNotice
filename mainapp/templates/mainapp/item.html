@@ -1,0 +1,43 @@
+{% extends "dummyapp/foundation.html" %}
+
+{% block content %}
+
+	</script>
+
+    <div class='ItemBlockContent'>
+    {% if item %}
+			<div class = "leftItem">
+			     <h3>{{item.name}}</h3>
+			     <img src="{{item.pic.url}}" class="img-thumbnail" id="item_pic">
+			     <h4>Initial price: £{{item.reserve_price}} </h4>
+			     <h4>Current price: £{{item.price}} </h4>
+			     <h4>End time: {{item.end_time}}</h4>
+			     {% if item.auction_time_is_passed %}
+			     <h4>The auction time has passed</h4>
+			     {% else %}
+			     <h4>Auction time has not yet passed</h4>
+			     <form role="form" action = "{% url 'view_item' item.id %}" method="POST">
+			     	{% csrf_token %}
+			        <input type = 'number' step="any" name = 'price' min = item.price>
+			     	<button id ='bid-btn' class = 'btn-success'>Bid</button>
+			     </form>
+
+			     {% endif %}
+
+			    {% else %}
+			    	<p>Item not found</p>
+			    {% endif %}
+		   </div>
+			 <div class = "rightItem">
+				 <h2> Bid History </h2>
+						<ul>
+							{% for bids in bid %}
+							<li>
+								<p> {{bids}} </p>
+							</li>
+							{% endfor %}
+						</ul>
+			 </div>
+
+		 </div>
+{% endblock %}

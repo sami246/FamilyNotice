@@ -22,4 +22,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', LoginView.as_view(template_name = 'mainapp/login.html') , name = 'login'),
     path('logout/', LogoutView.as_view() , name = 'logout'),
+    path('todolists/', views.todolist , name = 'todolists'),
+    path('tasks/<int:List_id>/', views.tasks , name = 'tasks'),
+    path('lists.json', views.lists_json, name="List of lists"),
+    path('tasks/', views.tasks_json, name="List of tasks"),
+    path('delete_list.json', views.delete_list, name='delete list'),
 ]
