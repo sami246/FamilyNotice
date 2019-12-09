@@ -49,32 +49,6 @@
 												 }
 									 })
 									 //END DELETE
-									 $(".todoright").hide();
-									 $(".TaskButton").click(function(){
-										 			 console.log("Task Button Clicked")
- 													 console.log($(this).attr("id"))
-													 $(".todoright").toggle();
-													 $.ajax({
-														 url: "{% url 'List of tasks' %}",
-														 type: 'PUT',
-														 dataType: 'json',
-														 data: $(this).attr('id'),
-														 beforeSend: function (xhr) {
-																		xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-														 },
-														 success: function(data){
-															 console.log(data)
-															 for(var i=0;i<data.task.length; i++){
-														    $(".Task_list").append("<li class='TaskRow' id=" + data.task[i].id + ">"
-																+ "<div>" + data.task[i].fields.name + "</div>"
-			 											    + "<button class='CompleteTaskButton' id=" + data.task[i].pk + "> Complete </button>"
-			                          + "<button class='DeleteTaskButton' id=" + data.task[i].pk + "> Delete </button></li>")
-																}
-													 		}
-													 })
-
- 											})
-											//END TASKBUTTON
 								 }
 				})
 			})

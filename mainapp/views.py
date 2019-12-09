@@ -28,26 +28,6 @@ def lists_json(request):
         'list' : list(List.objects.values()),
     })
 
-def tasks_json(request):
-    print(request.body)
-    value1 = list(request)
-    print('value:')
-    print(value1)
-    stvalue = str(value1)
-    splitValue = stvalue.split("'")
-    List_id = int(splitValue[1])
-    print(List_id)
-    instance = List.objects.get(pk=List_id)
-    print(instance)
-    print(instance.task.all())
-    taskSet = instance.task.all()
-
-    permission_serialize= json.loads(serialize('json', taskSet))
-
-    return JsonResponse({
-        'task' : permission_serialize,
-    })
-
 def tasks(request, List_id):
     if request.method == 'POST':
         print("POST")
