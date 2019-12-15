@@ -28,28 +28,29 @@ def lists_json(request):
         'list' : list(List.objects.values()),
     })
 
+
+def create_task(request):
+    print("Im in the createtask")
+    # NewItem = Task(
+	# 			name=name,
+	# )
+    # NewItem.save()
+    return JsonResponse({
+        'list' : list(List.objects.values()),
+    })
+
+@csrf_exempt
 def tasks(request, List_id):
     if request.method == 'POST':
-        print("POST")
-		# user = User.objects.get(username = request.user)
-		# member = Member.objects.get(user__exact =user.id)
-		# print(member)
-		# print(List_id)
-		# item = Item.objects.get(pk = List_id)
-        #
-		# price = float(request.POST['price'])
-        #
-		# print(price)
-		# if(price <= item.price):
-		# 	return HttpResponse('invalid bid, price too low')
-		# item.price = price
-		# item.highest_bidder = member
-		# item.save()
-		# print(item)
-		# bid = Bid.objects.create(item = item, bidder = member, price = price)
-		# return redirect('home')
-        #
-		# return HttpResponse('invalid bid')
+        print("POST NEW TASK")
+        newTask = request.POST['TaskName']
+        print(newTask)
+        task = Task(
+        name=newTask,)
+        task.save()
+        return JsonResponse({
+            'name' : newTask,
+        })
     else:
         print(List_id)
         instance = get_object_or_404(List, pk=List_id)
@@ -57,7 +58,7 @@ def tasks(request, List_id):
         taskSet = instance.task.all()
         permission_serialize= json.loads(serialize('json', taskSet))
         print("i am still working")
-    return render(request,'mainapp/tasks.html' ,{'tasks' : permission_serialize,})
+    return render(request,'mainapp/tasks.html' ,{'tasks' : permission_serialize, 'ListID': List_id})
 
 @csrf_exempt
 def delete_list(request):

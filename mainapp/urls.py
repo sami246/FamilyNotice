@@ -25,5 +25,6 @@ urlpatterns = [
     path('todolists/', views.todolist , name = 'todolists'),
     path('tasks/<int:List_id>/', views.tasks , name = 'tasks'),
     path('lists.json', views.lists_json, name="List of lists"),
+    path('createtask', views.create_task, name="create_task"),
     path('delete_list.json', views.delete_list, name='delete list'),
 ]

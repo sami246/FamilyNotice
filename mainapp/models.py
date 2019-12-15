@@ -19,7 +19,7 @@ class Member(models.Model):
 class Task(models.Model):
 	name = models.CharField(max_length=30)
 	assignTaskTo = models.ForeignKey(Member, on_delete= models.CASCADE, null=True, related_name='assign_task_to', blank=True)
-	date = models.DateTimeField()
+	date = models.DateTimeField(blank=True)
 	description = models.TextField(null=True, blank=True)
 	completed = models.BooleanField(default = False)
 

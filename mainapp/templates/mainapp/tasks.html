@@ -5,31 +5,47 @@
 {% block content %}
 
 
-    <div class='BlockContent'>
 
-     <h1>Task lists</h1>
      <div class= "taskcontainer">
-         <div class = "taskleft">
-           <ul class="Task_list">
-             {% for task in tasks %}
 
-              <ul id="" class="">
-                <!-- <img src="{{item.pic}}"> -->
-                <div class="">
-                  <p> {{task.fields.name}} </p>
-                  <!-- <div id="timerCountdown">Time Left: </div> -->
-                </div>
-              </ul>
-              {% endfor %}
-           </ul>
-         </div>
-         <div class = "taskright">
-           <h3> Add Task: </h3>
-           <ul class=""> </ul>
+       <div class = "taskright">
+         <h2> Add Task: </h2>
+         <!-- action="{% url 'create_task' %}" role="form" method="POST" enctype="multipart/form-data" -->
+         <form id="AddTaskForm">
+            Task:
+            {% csrf_token %}
+            <input type="text" class="AddTaskInput" name="TaskName">
+            <button type="button" class="btn btn-default" id= "AddTaskButton" value="{{ListID}}">Submit</button>
+          </form>
 
-         </div>
+      </div>
+
+         <!-- <div class = "taskleft"> -->
+         <h2> Task lists: </h2>
+                 <div class="notcomp">
+                        <h4> Not Completed </h4>
+                          {% for task in tasks %}
+                          <div id="task">
+                          {{task.fields.name}}
+
+                          <i class="glyphicon glyphicon-ok"></i>
+                          <i class="glyphicon glyphicon-remove"></i>
+                          </div>
+                          {% endfor %}
+
+                  </div>
+
+                  <div class="comp">
+                         <h4> Not Completed </h4>
+                         {% for task in tasks %}
+                             <div id="task">
+                                 {{task.fields.name}}
+                                 <i class="glyphicon glyphicon-ok"></i>
+                             </div>
+                         {% endfor %}
+
+                 </div>
+         <!-- </div> -->
+
      </div>
-
-
-    </div>
 {% endblock %}

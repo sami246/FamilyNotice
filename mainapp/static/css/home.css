@@ -1,0 +1,22 @@
+h1{
+  margin: 2vw;
+}
+
+h2{
+  padding: -2vw;
+  margin: 2vw;
+}
+
+h3{
+  margin: 2vw;
+}
+
+h4{
+  margin: 2vw;
+}
+
+.navbar-brand{
+   color: #2f5687;
+   font-family: cursive;
+
+}

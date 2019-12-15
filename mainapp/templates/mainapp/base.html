@@ -7,9 +7,10 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
 	 <script>
 		 $(function(){
 				$.ajax({
@@ -44,13 +45,23 @@
 																	 }
 													 })
 											 }
-											else{
-													 alert("The employee is not deleted!");
-												 }
 									 })
 									 //END DELETE
-								 }
-				})
+								 }//END DISPLAY TODOLIST
+				})//END OF AJAX1
+							$("#AddTaskButton").click(function(){
+								console.log("Hellow")
+								console.log($(this).attr("value"))
+								var List__ID = $(this).attr("value")
+								 $.ajax({
+									 	url: "/tasks/" + List__ID + "/",
+										method : "POST",
+										data: $("#AddTaskForm").serializeArray(),
+										success: function(data){
+											console.log(data)
+										}
+								 })
+							})//END ADD TASK
 			})
 	 </script>
 
@@ -64,29 +75,53 @@
 		padding: 3%;
 	}
 
-	.todocontainer{
+	/* .taskleft{
+			grid-area: taskleft;
+			max-width: 800px;
+			margin: auto;
+			padding: 10px;
+			width: 300px;
+			border: 7px solid white;
+			padding: 10px;
+			margin: 10px;
+	} */
+
+	/* .taskright{
+			grid-area: taskright;
+			width: 300px;
+			border: 7px solid white;
+			padding: 10px;
+			margin: 10px;
+	} */
+
+	/* .taskcontainer{
 		display: grid;
 		grid-column-gap: 5vw;
 		padding: 3vw;
 		grid-template-columns:
 			50% 50%;
 		grid-template-areas:
-			'todoleft todoright';
+			'taskleft taskright';
+	} */
+
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
 	}
 
-	.todoleft{
-			grid-area: todoleft;
+	body{
+		background-image: linear-gradient(120deg, #87CEEB, #87CEFA);
+		min-height: 10vh;
 	}
-	.todoright{
-			grid-area: todoright;
-	}
+
 </style>
 <body>
       <!-- NAVIGAATION BAR -->
-      <nav class="navbar navbar-inverse navbar-fixed-top">
+      <nav class="navbar navbar-inverse navbar-fixed-top" >
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="">FamilyNotice</a>
+            <a class="navbar-brand" href="{% url 'index' %}">FamilyNotice</a>
           </div>
           <!-- NAV BAR LEFT -->
           <ul class="nav navbar-nav">

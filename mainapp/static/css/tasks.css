@@ -1,0 +1,26 @@
+.AddTaskInput{
+  width: 80vw;
+  border: grey;
+  background: rgba(255,255,255,0.7);
+  padding: 2vw;
+  margin: 1vw;
+  outline: none;
+  font-size: 18px;
+}
+
+.taskright{
+  margin: 2vw;
+}
+
+#task{
+  background: rgba(255,255,255,0.5);
+  padding: 2vw;
+  margin: 2vw;
+  overflow: hidden;
+}
+
+#task i{
+  float: right;
+  margin-left: 20px;
+  cursor: pointer;
+}
