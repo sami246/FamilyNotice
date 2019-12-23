@@ -1,18 +1,84 @@
 {% extends "mainapp/base.html" %}
 
 {% block content %}
-    <div class='BlockContent'>
+{% load static %}
+  <div class="BlockContent">
+      <div class="indexContainer">
 
-     <h1>Index</h1>
-     <a href="{% url 'todolists' %}"><div>To do lists </div></a>
-     <div>Calendar </div>
-     <div>Create Event </div>
-     <div>Meal Planner </div>
-     <div>Messages </div>
-     <div>Find a family member </div>
-     <div>Chores / Assign Chores </div>
-     <div>Current Members of Family </div>
-     <div> </div>
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>To Do Lists </h1>
+             <div class="icons">
+               <i class="icon fas fa-share"></i>
+              </div>
+           </div>
+         </div>
+         </a>
 
-    </div>
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Calendar </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Create Event </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Meal Planner </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Messages </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Find a family member </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Chores / Assign Chores </h1>
+           </div>
+         </div>
+         </a>
+
+         <a href="{% url 'todolists' %}">
+         <div class="tile" id="middle">
+           <img src="{% static 'Note.jpg' %}" alt="My image">
+           <div class="image-content">
+             <h1>Current Members of Family </h1>
+           </div>
+         </div>
+         </a>
+      </div>
+      </div>
 {% endblock %}

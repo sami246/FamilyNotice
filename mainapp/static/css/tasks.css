@@ -24,3 +24,8 @@
   margin-left: 20px;
   cursor: pointer;
 }
+
+#task p{
+  padding: -2vw;
+  color: green;
+}

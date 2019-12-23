@@ -45,9 +45,15 @@ def tasks(request, List_id):
         print("POST NEW TASK")
         newTask = request.POST['TaskName']
         print(newTask)
-        task = Task(
-        name=newTask,)
-        task.save()
+        list = List.objects.get(pk=List_id)
+        print("List:")
+        print(list)
+        NewTask = Task(
+        name=newTask)
+        NewTask.save()
+        list.task.add(NewTask)
+        list.save()
+
         return JsonResponse({
             'name' : newTask,
         })
@@ -78,6 +84,27 @@ def delete_list(request):
         })
     except:
         Http404(request)
+
+
+@csrf_exempt
+def delete_task(request):
+    try:
+        value1 = list(request)
+        print(value1)
+        stvalue = str(value1)
+        splitValue = stvalue.split("'")
+        Task_id = int(splitValue[1])
+
+        instance = Task.objects.get(pk=Task_id)
+        print(instance)
+        instance.delete()
+        return JsonResponse({
+            'response' : 'return response from delete member function',
+            'taskID' : Task_id,
+        })
+    except:
+        Http404(request)
+
 
 def todolist(request):
     context = {

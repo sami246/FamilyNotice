@@ -25,22 +25,22 @@
                  <div class="notcomp">
                         <h4> Not Completed </h4>
                           {% for task in tasks %}
-                          <div id="task">
+                          <div class="task{{task.pk}}"id="task">
                           {{task.fields.name}}
 
-                          <i class="glyphicon glyphicon-ok"></i>
-                          <i class="glyphicon glyphicon-remove"></i>
+                          <i class="glyphicon glyphicon-ok" id="{{task.pk}}"></i>
+                          <i class="glyphicon glyphicon-remove DeleteTaskButton" id="{{task.pk}}"></i>
                           </div>
                           {% endfor %}
 
                   </div>
 
                   <div class="comp">
-                         <h4> Not Completed </h4>
+                         <h4>Completed </h4>
                          {% for task in tasks %}
-                             <div id="task">
+                             <div class="task{{task.pk}}" id="task">
                                  {{task.fields.name}}
-                                 <i class="glyphicon glyphicon-ok"></i>
+                                 <i class="glyphicon glyphicon-ok" id="{{task.pk}}"></i>
                              </div>
                          {% endfor %}
 

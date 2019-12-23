@@ -3,9 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>FamilyNotice</title>
 	<link href="https://fonts.googleapis.com/css?family=Gochi+Hand&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -156,46 +153,42 @@
 
 	body{
 		background-image: linear-gradient(100deg, #6495ED, #87CEFA);
-
+		min-height: 10vh;
 	}
 
 </style>
 <body>
       <!-- NAVIGAATION BAR -->
-			<nav>
-				 <div class="hamburger">
-					 <div class="line"></div>
-					 <div class="line"></div>
-					 <div class="line"></div>
-				 </div>
-				 <ul class="nav-links">
-					 <li><a href="{% url 'index' %}">FamilyNotice</a></li>
-					 <li><a href="#">To do lists</a></li>
-					 <li><a href="#">Create Event</a></li>
-					 <li><a href="#">Messages</a></li>
-					 <li><a href="#">Chores</a></li>
-					 {% if user.is_authenticated %}
-					 <li><a><span class="glyphicon"></span> {{user}}</a></li>
-					 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout </a></li>
-					 {% else %}
-					 <li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
-					 <!-- LOGIN -->
-					 <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
-					 {% endif %}
-				 </ul>
-			 </nav>
+      <nav class="navbar navbar-inverse navbar-fixed-top" >
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'index' %}">FamilyNotice</a>
+          </div>
+          <!-- NAV BAR LEFT -->
+          <ul class="nav navbar-nav">
+            <li><a href="">Closed Auction</a></li>
+						<li><a href="">Post a new Item</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+
+            <!-- SIGN UP -->
+						{% if user.is_authenticated %}
+						<li><a><span class="glyphicon"></span> {{user}}</a></li>
+					 	<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout </a></li>
+					 	{% else %}
+					 	<li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
+					 	<!-- LOGIN -->
+					 	<li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+					 	{% endif %}
+          </ul>
+        </div>
+      </nav>
   <br>
 	<br>
-	<div class="landing">
-
 	{% block content %}
 	{% endblock %}
-	</div>
   {% block scripts %}{% endblock %}
 	<br>
-	{% block footer %}
-		<script type="text/javascript" src="{% static "javascript/navbar.js" %}"></script>
-	{% endblock %}
 	<!-- <a href="https://www.freepik.com/free-photos-vectors/business">Business vector created by crosspixel - www.freepik.com</a> -->
 </body>
 </html>
