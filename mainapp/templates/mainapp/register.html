@@ -1,0 +1,54 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+    <div class='BlockContent'>
+      <div class="RegisterPage">
+
+         <form class = "register-form" role="form" action = "{% url 'register' %}" method="POST">
+            <h3>Please enter your details register</h3>
+            {% csrf_token %}
+
+            <div class="txtb">
+              <input type="text" name="username" required id="id_username">
+              <span data-placeholder="Username"></span>
+            </div>
+            <div class="txtb">
+              <input type="text" name="first_name" required id="id_firstname">
+              <span data-placeholder="First Name"></span>
+            </div>
+            <div class="txtb">
+              <input type="text" name="last_name" required id="id_lastname">
+              <span data-placeholder="Last Name"></span>
+            </div>
+            <div class="txtb">
+              <input type="email" name="email" required id="id_email">
+              <span data-placeholder="Email"></span>
+            </div>
+              <div class="txtb">
+              <input type="password" name="password" required id="id_password" >
+              <span data-placeholder="Password"></span>
+            </div>
+            <p>Date of Birth</p>
+            <div class="txtbDOB">
+              <input type="date" name="DOB" required id="id_dob">
+              <span data-placeholder="Date of Birth"></span>
+            </div>
+            <div class="ToU">Type of User</div>
+              <select id="typeOfUser" name="typeOfUser">
+                <option value="FamilyMember">Regular Family Member</option>
+                <option value="Gaurdian">Gaurdian</option>
+              </select>
+            <br><br>
+            <br>
+
+
+
+
+
+
+            <!-- btn btn-success -->
+            <input type ="submit" class=" loginButton" value="Register">
+          </form>
+      </div>
+    </div>
+{% endblock %}

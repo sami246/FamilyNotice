@@ -5,6 +5,7 @@
   box-sizing: border-box;
 }
 .login-form{
+  margin-top: 8%;
   width: 360px;
   height: 580px;
   padding: 80px 40px;
@@ -20,6 +21,37 @@
   margin-top: -40px;
 }
 
+.register-form h3{
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: -40px;
+}
+
+.register-form p{
+  color: white;
+  padding: 0;
+  margin: 0;
+  margin-bottom: -5vh;
+  margin-top: -2vh;
+  margin-left: 0.25vw;
+}
+
+.ToU{
+  color: white;
+  padding: 0;
+  margin: 1vh;
+  margin-left: 0.25vw;
+}
+
+#typeOfUser{
+  width: 100%;
+  background: none;
+  border-radius: 1vw;
+  border-color: white;
+  padding: 1vw;
+  color: white;
+}
+
 .txtb{
     border-bottom: 2px solid #adadad;
     position: relative;
@@ -27,6 +59,17 @@
 }
 
 .txtb input{
+    font-size: 15px;
+    color: #F8F8FF;
+    border: none;
+    width: 100%;
+    outline: none;
+    background: none;
+    padding: 0 5px;
+    height: 40px;
+}
+
+.txtbDOB input{
     font-size: 15px;
     color: #F8F8FF;
     border: none;
@@ -56,6 +99,19 @@
   color: white;
   background: linear-gradient(120deg, #3498db, #8e44ad);
   transition: .5s;
+}
+
+.txtbDOB {
+  border-bottom: 2px solid #adadad;
+  position: relative;
+  margin: 30px 0;
+  /* content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  color: white;
+  background: linear-gradient(120deg, #3498db, #8e44ad);
+  transition: .5s; */
 }
 
 .focus + span::before{

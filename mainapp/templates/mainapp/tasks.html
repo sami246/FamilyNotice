@@ -10,7 +10,6 @@
 
        <div class = "taskright">
          <h2> Add Task: </h2>
-         <!-- action="{% url 'create_task' %}" role="form" method="POST" enctype="multipart/form-data" -->
          <form id="AddTaskForm">
             Task:
             {% csrf_token %}
@@ -25,12 +24,14 @@
                  <div class="notcomp">
                         <h4> Not Completed </h4>
                           {% for task in tasks %}
+                          {% if task.fields.completed == False %}
                           <div class="task{{task.pk}}"id="task">
                           {{task.fields.name}}
-
-                          <i class="glyphicon glyphicon-ok" id="{{task.pk}}"></i>
                           <i class="glyphicon glyphicon-remove DeleteTaskButton" id="{{task.pk}}"></i>
+                          <i class="glyphicon glyphicon-ok CompletedButton" id="{{task.pk}}"></i>
+
                           </div>
+                          {% endif %}
                           {% endfor %}
 
                   </div>
@@ -38,10 +39,13 @@
                   <div class="comp">
                          <h4>Completed </h4>
                          {% for task in tasks %}
+                              {% if task.fields.completed == True %}
                              <div class="task{{task.pk}}" id="task">
                                  {{task.fields.name}}
-                                 <i class="glyphicon glyphicon-ok" id="{{task.pk}}"></i>
+                                 <i class="glyphicon glyphicon-remove DeleteTaskButton" id="{{task.pk}}"></i>
+                                 <i class="glyphicon glyphicon-minus CompletedButton" id="{{task.pk}}"></i>
                              </div>
+                              {% endif %}
                          {% endfor %}
 
                  </div>
