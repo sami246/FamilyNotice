@@ -95,6 +95,7 @@ nav {
   }
   .landing {
     flex-direction: column;
+    width: 100%;
   }
   .nav-links li {
     opacity: 0;

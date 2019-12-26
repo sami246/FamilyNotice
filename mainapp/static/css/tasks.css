@@ -1,5 +1,5 @@
 .AddTaskInput{
-  width: 80vw;
+  width: 80%;
   border: grey;
   background: rgba(255,255,255,0.7);
   padding: 2vw;
@@ -12,11 +12,29 @@
   margin: 2vw;
 }
 
+.taskgrid{
+  grid-area: container;
+  background: red;
+  width: 90%;
+}
+.taskcontainer{
+    display: grid;
+    grid-column-gap: 5vw;
+    padding: 3vw;
+    width: 100%;
+    grid-template-columns:
+      5% 90% 5%;
+    grid-template-areas:
+      '. container .';
+}
+
+
 #task{
   background: rgba(255,255,255,0.5);
   padding: 2vw;
   margin: 2vw;
   overflow: hidden;
+  grid-area: task;
 }
 
 #task i{

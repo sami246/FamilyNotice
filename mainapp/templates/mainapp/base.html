@@ -17,6 +17,7 @@
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/todolists.css' %}">
 
 	 <script>
 		 $(function(){
@@ -26,9 +27,12 @@
 									 console.log(data)
 									for(var i=0;i<data.list.length; i++){
 											var the_id = data.list[i].id
-											$(".To_do_list").append("<li class='ToDoListRow' id=" + data.list[i].id + ">"
-												 + "<a href='/tasks/" + the_id + "'>" + data.list[i].nameOfList + "</a><br>"
-                         + "<button class='DeleteButton' id=" + data.list[i].id + "> Delete </button></li>")
+											// $(".To_do_list").append("<li class='ToDoListRow' id=" + data.list[i].id + ">"
+											// 	 + "<a href='/tasks/" + the_id + "'>" + data.list[i].nameOfList + "</a><br>"
+                      //    + "<button class='DeleteButton' id=" + data.list[i].id + "> Delete </button></li>")
+											$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+						          + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
+
 									}
 
 									$(".DeleteButton").click(function(){
