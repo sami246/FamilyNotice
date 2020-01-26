@@ -4,7 +4,7 @@
   overflow: hidden;
   cursor: pointer;
   grid-area: tile;
-  border: 7px solid grey;
+  border: 5px solid #87CEFA;
   background-color: white;
   border-radius: 15px;
 }

@@ -27,6 +27,7 @@ urlpatterns = [
     path('lists.json', views.lists_json, name="List of lists"),
     path('completed.json', views.complete_status, name="complete status"),
     path('register/', views.register, name="register"),
+    path('chooseFamily/', views.choose_family, name="choose family"),
     path('delete_list.json', views.delete_list, name='delete list'),
     path('delete_task.json', views.delete_task, name='delete task'),
 ]

@@ -14,7 +14,6 @@
 
 .taskgrid{
   grid-area: container;
-  background: red;
   width: 90%;
 }
 .taskcontainer{

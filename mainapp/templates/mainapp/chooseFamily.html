@@ -1,0 +1,30 @@
+{% extends "mainapp/base.html" %}
+
+
+
+{% block content %}
+
+
+    <div class='BlockContent'>
+
+     <h1>Families</h1>
+     <div class= "todocontainer">
+          <form action="{% url 'choose family' %}" method="POST">
+            {% csrf_token %}
+            {% if families|length > 0 %}
+            {% for family in families %}
+              <input type="radio" name="family" value="{{family.fields.nameofFamily}}"> {{family.fields.nameofFamily}}<br>
+            {% endfor %}
+              <button type="submit"> Use this family </button>
+            {% else %}
+              YOU NEED A FAMILY!
+            {% endif %}
+
+          </form>
+           <!-- $(".family_list").append("<a href='#'>"
+           + "<div class='listTile' id=" + data.family[i].pk + "><h1 id='long'>" + data.family[i].fields.nameofFamily + "</h1></div></a>") -->
+     </div>
+
+
+    </div>
+{% endblock %}

@@ -121,6 +121,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = "index" #redirect view because view is built in
+LOGIN_REDIRECT_URL = "choose family" #redirect view because view is built in
 LOGOUT_REDIRECT_URL = "login" # redirect when user logsout
 LOGIN_URL = "login" #redirect when user needs to login

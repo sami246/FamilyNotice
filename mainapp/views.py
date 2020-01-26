@@ -10,6 +10,16 @@ from .forms import *
 from django.core.serializers import serialize
 import json
 
+# def family_required(f):
+#     def familyCheck(request):
+#         print(request.session.get('family_session', None))
+#         if request.session.get('family_session', None):
+#             print("success")
+#             f(request)
+#             return familyCheck
+#         else:
+#             return redirect('index')
+
 # Create your views here.
 @login_required
 def index(request):
@@ -23,9 +33,40 @@ def login(request):
 
 	return render(request,'mainapp/loginPage.html' ,{'form':loginForm,})
 
+
+
+@login_required
+def choose_family(request):
+    if request.method == 'POST':
+        print('mans trying to post')
+        request.session['family_session'] = request.POST['family']
+        return redirect('index')
+    print(request.user)
+    user = User.objects.get(username = request.user)
+    print(user)
+    mem = Member.objects.get(user = user)
+    print(mem)
+    # family = Family.objects.get(members = mem)
+    familyfilter = Family.objects.filter(members = mem)
+    print(familyfilter)
+    fam = json.loads(serialize('json', familyfilter))
+    return render(request,'mainapp/chooseFamily.html', {'families' : fam})
+
 def lists_json(request):
+
+    family_session = request.session['family_session']
+    print("the family currently being used is:")
+    print(family_session)
+    # family = Family.objects.get(members = mem)
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    print(familyfilter)
+    print(List.objects.filter(family = familyfilter))
+    lists = List.objects.filter(family = familyfilter)
+    permission_serialize= json.loads(serialize('json', lists))
+    # list(List.objects.values())
+
     return JsonResponse({
-        'list' : list(List.objects.values()),
+        'list' : permission_serialize,
     })
 
 def complete_status(request):
@@ -61,13 +102,6 @@ def register(request):
         password = request.POST['password']
         DOB = request.POST['DOB']
         typeU = request.POST['typeOfUser']
-        print(username)
-        print(first_name)
-        print(last_name)
-        print(email)
-        print(password)
-        print(DOB)
-        print(typeU)
         user = User(
         username=username,
         first_name=first_name,
@@ -82,7 +116,6 @@ def register(request):
     return render(request,'mainapp/register.html')
 
 @login_required
-@csrf_exempt
 def tasks(request, List_id):
     if request.method == 'POST':
         print("POST NEW TASK")
