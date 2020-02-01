@@ -1,0 +1,91 @@
+{% extends "mainapp/base.html" %}
+
+
+
+{% block content %}
+
+
+    <div class='BlockContent'>
+
+     <h1>Meal Planner</h1>
+     <div class= "Mealcontainer">
+
+           <div class="MealCalendar"
+              <div class="MondayGrid"> Monday</div>
+              <div class="TuesdayGrid"> Tuesday</div>
+              <div class="WednesdayGrid"> Wednesday</div>
+              <div class="ThursdayGrid"> Thursday</div>
+              <div class="FridayGrid"> Friday</div>
+              <div class="SaturdayGrid"> Saturday</div>
+              <div class="SundayGrid"> Sunday</div>
+           </div>
+
+           <table>
+  <caption>Statement Summary</caption>
+  {% for m in meal%}
+    {{m}}
+    {% endfor %}
+
+  <thead>
+    <tr>
+      <th scope="col">Day</th>
+      <th scope="col">Breakfast</th>
+      <th scope="col">Lunch</th>
+      <th scope="col">Dinner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="Account">Monday</td>
+      <td data-label="Due Date">
+          {% if m.mealType == MonB %}
+            hi
+          {% endif %}
+      </td>
+      <td data-label="Amount">$1,190</td>
+      <td data-label="Period">03/01/2016 - 03/31/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Account">Tuesday</td>
+      <td data-label="Due Date">03/01/2016</td>
+      <td data-label="Amount">$2,443</td>
+      <td data-label="Period">02/01/2016 - 02/29/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Account">Wednesday</td>
+      <td data-label="Due Date">03/01/2016</td>
+      <td data-label="Amount">$1,181</td>
+      <td data-label="Period">02/01/2016 - 02/29/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Acount">Thursday</td>
+      <td data-label="Due Date">02/01/2016</td>
+      <td data-label="Amount">$842</td>
+      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Acount">Friday</td>
+      <td data-label="Due Date">02/01/2016</td>
+      <td data-label="Amount">$842</td>
+      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Acount">Saturday</td>
+      <td data-label="Due Date">02/01/2016</td>
+      <td data-label="Amount">$842</td>
+      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+    </tr>
+    <tr>
+      <td scope="row" data-label="Acount">Sunday</td>
+      <td data-label="Due Date">02/01/2016</td>
+      <td data-label="Amount">$842</td>
+      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+    </tr>
+  </tbody>
+</table>
+
+     </div>
+
+
+    </div>
+{% endblock %}

@@ -33,8 +33,6 @@ def login(request):
 
 	return render(request,'mainapp/loginPage.html' ,{'form':loginForm,})
 
-
-
 @login_required
 def choose_family(request):
     if request.method == 'POST':
@@ -53,7 +51,10 @@ def choose_family(request):
     return render(request,'mainapp/chooseFamily.html', {'families' : fam})
 
 def lists_json(request):
-
+    user = User.objects.get(username = request.user)
+    print(user)
+    mem = Member.objects.get(user = user)
+    profile_pic = str(mem.profilePic)
     family_session = request.session['family_session']
     print("the family currently being used is:")
     print(family_session)
@@ -67,6 +68,7 @@ def lists_json(request):
 
     return JsonResponse({
         'list' : permission_serialize,
+        'pic_url' : profile_pic,
     })
 
 def complete_status(request):
@@ -192,3 +194,57 @@ def todolist(request):
     }
 
     return render(request,'mainapp/todolists.html' ,{})
+
+
+def meal_planner(request):
+    Meals = Meal.objects.filter()
+    for i in range(len(Meals)):
+        if Meals[i].mealType == 'MonB':
+            monB = Meals[i].meal
+        if Meals[i].mealType == 'MonL':
+            monL = = Meals[i].meal
+        if Meals[i].mealType == 'MonD':
+            monD = Meals[i].meal
+
+        if Meals[i].mealType == 'TueB':
+            tueB = = Meals[i].meal
+        if Meals[i].mealType == 'TueL':
+            tueL = Meals[i].meal
+        if Meals[i].mealType == 'TueD':
+            tueD = = Meals[i].meal
+
+        if Meals[i].mealType == 'WedB':
+            wedB = Meals[i].meal
+        if Meals[i].mealType == 'WedB':
+            wedL = = Meals[i].meal
+        if Meals[i].mealType == 'WedB':
+            wedD = Meals[i].meal
+
+
+        if Meals[i].mealType == 'ThurB':
+            tueB = = Meals[i].meal
+        if Meals[i].mealType == 'ThurB':
+            monB = Meals[i].meal
+        if Meals[i].mealType == 'TueB':
+            tueB = = Meals[i].meal
+        if Meals[i].mealType == 'MonB':
+            monB = Meals[i].meal
+        if Meals[i].mealType == 'TueB':
+            tueB = = Meals[i].meal
+        if Meals[i].mealType == 'MonB':
+            monB = Meals[i].meal
+        if Meals[i].mealType == 'TueB':
+            tueB = = Meals[i].meal
+        if Meals[i].mealType == 'MonB':
+            monB = Meals[i].meal
+        if Meals[i].mealType == 'TueB':
+            tueB = = Meals[i].meal
+
+        # if meal.mealType == MonB:
+        #     monB = meal.meal
+    print('The value:')
+    print(monB)
+    context = {
+        'meal' : Meals,
+    }
+    return render(request,'mainapp/mealPlanner.html', context)

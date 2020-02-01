@@ -8,19 +8,9 @@
 
      <div class= "taskcontainer">
        <div class="taskgrid">
-       <div class = "taskright">
-         <h2> Add Task: </h2>
-         <form id="AddTaskForm">
-            Task:
-            {% csrf_token %}
-            <input type="text" class="AddTaskInput" name="TaskName">
-            <button type="button" class="btn btn-default" id= "AddTaskButton" value="{{ListID}}">Submit</button>
-          </form>
-
-      </div>
-
+      <h2 style="margin:-2vw;"> Task lists: </h2>
          <div class = "taskleft">
-         <h2> Task lists: </h2>
+
                  <div class="notcomp">
                         <h4> Not Completed </h4>
                           {% for task in tasks %}
@@ -50,6 +40,16 @@
 
                  </div>
            </div>
+           <div class = "taskright">
+             <h2> Add Task: </h2>
+             <form id="AddTaskForm">
+                Task:
+                {% csrf_token %}
+                <input type="text" class="AddTaskInput" name="TaskName">
+                <button type="button" class="btn btn-default" id= "AddTaskButton" value="{{ListID}}">Submit</button>
+              </form>
+
+          </div>
          </div>
 
      </div>

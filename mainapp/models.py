@@ -52,8 +52,8 @@ class EventEntry(models.Model):
 	membersInvolved = models.ManyToManyField(Member)
 	description = models.TextField()
 	date = models.DateField()
-	time = models.TimeField()
 	location = models.CharField(max_length=30)
+	start_time = models.TimeField()
 
 	def __str__(self):
 		return self.title
@@ -70,3 +70,13 @@ class Chores(models.Model):
 
 	def __str__(self):
 		return self.name
+
+class Meal(models.Model):
+	mealType = models.CharField(max_length = 50,
+	 choices= DaysMeals.choices(), unique=True)
+	meal = models.CharField(max_length=30)
+	description = models.TextField(blank = True)
+
+
+	def __str__(self):
+		return self.meal + " " + self.mealType

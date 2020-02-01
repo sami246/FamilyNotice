@@ -12,6 +12,30 @@
   margin: 2vw;
 }
 
+.notcomp{
+  grid-area: notcomp;
+  overflow: auto;
+  height: 50vh;
+}
+
+.comp{
+  grid-area: comp;
+  display: flow-root;
+  overflow: auto;
+  height: 50vh;
+}
+
+.taskleft{
+  display: grid;
+  grid-column-gap: 5vw;
+  padding: 3vw;
+  width: 100%;
+  grid-template-columns:
+    50% 50%;
+  grid-template-areas:
+    'notcomp comp';
+}
+
 .taskgrid{
   grid-area: container;
   width: 90%;
@@ -32,7 +56,8 @@
   background: rgba(255,255,255,0.5);
   padding: 2vw;
   margin: 2vw;
-  overflow: hidden;
+  height: 1vh;
+  align-items: center;
   grid-area: task;
 }
 

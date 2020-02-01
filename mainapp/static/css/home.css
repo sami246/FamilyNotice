@@ -35,10 +35,16 @@ nav {
   background: #5b78c7;
 }
 
+.img-thumbnail{
+  width: 2.5vw;
+  height: 2.5vw;
+  margin: 0.5vw;
+}
+
 .nav-links {
   display: flex;
   list-style: none;
-  width: 75%;
+  width: 65%;
   height: 100%;
   justify-content: space-around;
   align-items: center;
@@ -49,7 +55,7 @@ nav {
 .nav-links li a {
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 1.2vw;
 }
 
 
