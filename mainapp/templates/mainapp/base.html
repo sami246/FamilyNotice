@@ -30,7 +30,7 @@
 											var the_id = data.list[i].pk
 											$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
 						          + "<div class='listTile' id=" + data.list[i].pk + "><h1 id='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
-											$(".profile_pic").append("<img src='" + data.pic_url +"' alt='Should be a profile pic' class='img-thumbnail' id='item_pic'>")
+											$(".profile_pic").append("<img src=" + data.pic_url +" class='img-thumbnail' id='item_pic'>")
 											// $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
 						          // + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
 
@@ -131,11 +131,29 @@
 										})
 								 }
 			});
-	 </script>
-	 <script>
-	 $(document).ready(function() {
-	 $(":input").attr("autocomplete","off");
-		});
+
+			$(document).on("click", '.DeleteMealButton', function(event) {
+				console.log('delete button clicked right')
+				console.log($(this).attr("id"))
+						var deleteConf = confirm("Are you sure you want to delete this Meal permanently?");
+							if (deleteConf == true){
+										csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+												$.ajax({
+													url: "{% url 'delete meal' %}",
+													type : "DELETE",
+													dataType: 'json',
+													data: $(this).attr('id'),
+													beforeSend: function (xhr) {
+																 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+													},
+													success: function(data){
+																 console.log(data)
+																 $('#Link'+data.meal_id+'').html("<a href='/../addmeal/" + data.meal_type +"'>Add Dish</a>")
+																 console.log('Task is deleted')
+													}
+										})
+								 }
+			});
 	 </script>
 
 </head>
@@ -204,7 +222,7 @@
 					 <li><a href="#">Messages</a></li>
 					 <li><a href="#">Chores</a></li>
 					 {% if user.is_authenticated %}
-					 <li style="font-weight: bold; border: 2px solid white; padding-left:0.5vw; border-radius: 15px;"><a class="profile_pic"><span class="glyphicon"></span>{{user}}</a></li>
+					 <li style="font-weight: bold; border: 2px solid white; padding-left:0.5vw; border-radius: 15px;"><a class="profile_pic"><span class="glyphicon"></span>{{request.user}}</a></li>
 					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'choose family' %}"><span class="glyphicon"></span>{{request.session.family_session}}</a></li>
 					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout </a></li>
 					 {% else %}

@@ -197,54 +197,92 @@ def todolist(request):
 
 
 def meal_planner(request):
-    Meals = Meal.objects.filter()
-    for i in range(len(Meals)):
-        if Meals[i].mealType == 'MonB':
-            monB = Meals[i].meal
-        if Meals[i].mealType == 'MonL':
-            monL = = Meals[i].meal
-        if Meals[i].mealType == 'MonD':
-            monD = Meals[i].meal
-
-        if Meals[i].mealType == 'TueB':
-            tueB = = Meals[i].meal
-        if Meals[i].mealType == 'TueL':
-            tueL = Meals[i].meal
-        if Meals[i].mealType == 'TueD':
-            tueD = = Meals[i].meal
-
-        if Meals[i].mealType == 'WedB':
-            wedB = Meals[i].meal
-        if Meals[i].mealType == 'WedB':
-            wedL = = Meals[i].meal
-        if Meals[i].mealType == 'WedB':
-            wedD = Meals[i].meal
-
-
-        if Meals[i].mealType == 'ThurB':
-            tueB = = Meals[i].meal
-        if Meals[i].mealType == 'ThurB':
-            monB = Meals[i].meal
-        if Meals[i].mealType == 'TueB':
-            tueB = = Meals[i].meal
-        if Meals[i].mealType == 'MonB':
-            monB = Meals[i].meal
-        if Meals[i].mealType == 'TueB':
-            tueB = = Meals[i].meal
-        if Meals[i].mealType == 'MonB':
-            monB = Meals[i].meal
-        if Meals[i].mealType == 'TueB':
-            tueB = = Meals[i].meal
-        if Meals[i].mealType == 'MonB':
-            monB = Meals[i].meal
-        if Meals[i].mealType == 'TueB':
-            tueB = = Meals[i].meal
-
-        # if meal.mealType == MonB:
-        #     monB = meal.meal
-    print('The value:')
-    print(monB)
+    family_session = request.session['family_session']
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    meals = MealWeek.objects.get(family = familyfilter)
     context = {
-        'meal' : Meals,
+        'meals' : meals,
     }
     return render(request,'mainapp/mealPlanner.html', context)
+
+def addmeal2(request):
+    if request.method == 'POST':
+        text = request.POST['text']
+        desc = request.POST['description']
+        type = request.POST['mealType']
+        print('#######################')
+        print(type)
+        newMeal = MealDesc(description=desc, text=text)
+        newMeal.save()
+        family_session = request.session['family_session']
+        familyfilter = Family.objects.get(nameofFamily = family_session)
+        meals = MealWeek.objects.get(family = familyfilter)
+        if type == 'monB':
+            meals.monB = newMeal
+        if type == 'monL':
+            meals.monL = newMeal
+        if type == 'monD':
+            meals.monD = newMeal
+        if type == 'tueB':
+            meals.tueB = newMeal
+        if type == 'tueL':
+            meals.tueL = newMeal
+        if type == 'tueD':
+            meals.tueD = newMeal
+        if type == 'wedB':
+            meals.wedB=newMeal
+        if type == 'wedL':
+            meals.wedL=newMeal
+        if type == 'wedD':
+            meals.wedD=newMeal
+        if type == 'thuB':
+            meals.thuB=newMeal
+        if type == 'thuL':
+            meals.thuL=newMeal
+        if type == 'thuD':
+            meals.thuD=newMeal
+        if type == 'friB':
+            meals.friB=newMeal
+        if type == 'friL':
+            meals.friL=newMeal
+        if type == 'friD':
+            meals.friD=newMeal
+        if type == 'satL':
+            meals.satL=newMeal
+        if type == 'satB':
+            meals.satB=newMeal
+        if type == 'satD':
+            meals.satD=newMeal
+        if type == 'sunB':
+            meals.sunB=newMeal
+        if type == 'sunL':
+            meals.sunL=newMeal
+        if type == 'sunD':
+            meals.sunD=newMeal
+        meals.save()
+        # newDay = MealWeek(type=newMeal)
+        # newDay.save()
+        return redirect('meal planner')
+
+def deleteMeal(request):
+    value1 = list(request)
+    stvalue = str(value1)
+    splitValue = stvalue.split(":")
+    print(splitValue)
+    MealTyp = splitValue[1]
+    print(MealTyp)
+    Meal_id = int(splitValue[2])
+    meal = MealDesc.objects.get(pk = Meal_id)
+    meal.delete()
+    return JsonResponse({
+        'meal_id' : Meal_id,
+        'meal_type' : MealTyp,
+    })
+
+
+def addmeal(request, meal):
+
+    form = MealEntryForm()
+    context = { 'form' : form, 'meal':meal,}
+    print(meal)
+    return render(request,'mainapp/newMeal.html', context)

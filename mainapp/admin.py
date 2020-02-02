@@ -18,13 +18,15 @@ class FamilyAdmin(admin.ModelAdmin):
     def CurrentLists(self, obj):
         return ", ".join([p.nameOfList for p in obj.lists.all()])
 
-class MealAdmin(admin.ModelAdmin):
-    list_display = ['mealType', 'meal']
-    ordering = ['mealType']
+
+# class MealAdmin(admin.ModelAdmin):
+#     list_display = ['mealType', 'meal']
+#     ordering = ['mealType']
 
 admin.site.register(Family, FamilyAdmin)
 admin.site.register(Member)
 admin.site.register(List, ListAdmin)
 admin.site.register(EventEntry)
 admin.site.register(Task)
-admin.site.register(Meal, MealAdmin)
+admin.site.register(MealWeek)
+admin.site.register(MealDesc)

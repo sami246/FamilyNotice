@@ -1,0 +1,82 @@
+Meals = Meal.objects.filter()
+  Mealsss = Meal.objects.values()
+  print(Mealsss)
+  for i in range(len(Meals)):
+      if Meals[i].mealType == 'MonB':
+          monB = Meals[i].meal
+      if Meals[i].mealType == 'MonL':
+          monL = Meals[i].meal
+      if Meals[i].mealType == 'MonD':
+          monD = Meals[i].meal
+
+      if Meals[i].mealType == 'TueB':
+          tueB = Meals[i].meal
+      if Meals[i].mealType == 'TueL':
+          tueL = Meals[i].meal
+      if Meals[i].mealType == 'TueD':
+          tueD = Meals[i].meal
+
+      if Meals[i].mealType == 'WedB':
+          wedB = Meals[i].meal
+      if Meals[i].mealType == 'WedL':
+          wedL = Meals[i].meal
+      if Meals[i].mealType == 'WedD':
+          wedD = Meals[i].meal
+
+
+      if Meals[i].mealType == 'ThurB':
+          thuB = Meals[i].meal
+      if Meals[i].mealType == 'ThurL':
+          thuL = Meals[i].meal
+      if Meals[i].mealType == 'ThurD':
+          thuD = Meals[i].meal
+
+      if Meals[i].mealType == 'FriB':
+          friB = Meals[i].meal
+      if Meals[i].mealType == 'FriL':
+          friL = Meals[i].meal
+      if Meals[i].mealType == 'FriD':
+          friD = Meals[i].meal
+
+      if Meals[i].mealType == 'SatB':
+          satB = Meals[i].meal
+      if Meals[i].mealType == 'SatB':
+          satL = Meals[i].meal
+      if Meals[i].mealType == 'SatB':
+          satD = Meals[i].meal
+
+      if Meals[i].mealType == 'SunB':
+          sunB = Meals[i].meal
+      if Meals[i].mealType == 'SunB':
+          sunL = Meals[i].meal
+      if Meals[i].mealType == 'SunB':
+          sunD = Meals[i].meal
+
+      # if meal.mealType == MonB:
+      #     monB = meal.meal
+  print('The value:')
+  print(monB)
+  context = {
+      'meal' : Meals,
+      'monB' :monB,
+      'monL':monL,
+      'monD':monD,
+      'tueB':tueB,
+      'tueL':tueL,
+      'tueD':tueD,
+      'wedB':wedB,
+      'wedL':wedL,
+      'wedD':wedD,
+      'thuB':thuB,
+      'thuL':thuL,
+      'thuD':thuD,
+      'friB':friB,
+      'friL':friL,
+      'friD':friD,
+      'satB':satB,
+      'satL':satL,
+      'satD':satD,
+      'sunB':sunB,
+      'sunL':sunL,
+      'sunD':sunD,
+  }

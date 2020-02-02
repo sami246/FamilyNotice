@@ -17,6 +17,11 @@ table caption {
   margin: .5em 0 .75em;
 }
 
+.MealDay{
+  background-color: grey;
+  color: white;
+}
+
 table tr {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
@@ -33,9 +38,11 @@ table th {
   font-size: .85em;
   letter-spacing: .1em;
   text-transform: uppercase;
+  background-color: grey;
+  color: white;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   table {
     border: 0;
   }

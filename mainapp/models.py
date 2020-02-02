@@ -11,7 +11,7 @@ class Member(models.Model):
 	userType = models.CharField(max_length = 50,
 	 choices=userType.choices())
 	profilePic = models.ImageField(upload_to = 'static/',
-	 	default = 'static/empty-photo.jpg')
+	 	default = '/static/empty-photo.jpg')
 
 	def __str__(self):
 		return self.user.username
@@ -34,11 +34,56 @@ class List(models.Model):
 		# name = self.nameofFamily
 		return self.nameOfList
 
+class MealDesc(models.Model):
+	text = models.CharField(default=None, max_length=30, null=True, unique=False)
+	description = models.TextField(null=True, blank=True)
+
+	def __str__(self):
+		return self.text
+
+# class Meal(models.Model):
+# 	mealType = models.CharField(max_length = 50,
+# 	 choices= DaysMeals.choices(), unique=True)
+# 	meal = models.CharField(max_length=30)
+# 	description = models.TextField(blank = True)
+#
+#
+# 	def __str__(self):
+# 		return self.meal + " " + self.mealType
+
+class MealWeek(models.Model):
+	monB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="monb", null=True, default=None, unique=False, blank=True)
+	monL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="monL", null=True, default=None, unique=False, blank=True)
+	monD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="monD", null=True, default=None, unique=False, blank=True)
+	tueB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="tueB", null=True, default=None, unique=False, blank=True)
+	tueL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="tueL", null=True, default=None, unique=False, blank=True)
+	tueD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="tueD", null=True, default=None, unique=False, blank=True)
+	wedB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="wedB", null=True, default=None, unique=False, blank=True)
+	wedL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="wedL", null=True, default=None, unique=False, blank=True)
+	wedD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="wedD", null=True, default=None, unique=False, blank=True)
+	thuB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="thuB", null=True, default=None, unique=False, blank=True)
+	thuL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="thuL", null=True, default=None, unique=False, blank=True)
+	thuD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="thuD", null=True, default=None, unique=False, blank=True)
+	friB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="friB", null=True, default=None, unique=False, blank=True)
+	friL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="friL", null=True, default=None, unique=False, blank=True)
+	friD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="friD", null=True, default=None, unique=False, blank=True)
+	satB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="satB", null=True, default=None, unique=False, blank=True)
+	satL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="satL", null=True, default=None, unique=False, blank=True)
+	satD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="satD", null=True, default=None, unique=False, blank=True)
+	sunB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunB", null=True, default=None, unique=False, blank=True)
+	sunL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunL", null=True, default=None, unique=False, blank=True)
+	sunD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunD", null=True, default=None, unique=False, blank=True)
+
+	def __str__(self):
+		return self.family.nameofFamily + " Meal Planner"
+
+
 # Create your models here.
 class Family(models.Model):
 	nameofFamily = models.CharField(max_length=30)
 	members = models.ManyToManyField(Member)
 	lists = models.ManyToManyField(List, blank=True)
+	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE, blank=True, null=True)
 
 	def __str__(self):
 		return self.nameofFamily
@@ -70,13 +115,3 @@ class Chores(models.Model):
 
 	def __str__(self):
 		return self.name
-
-class Meal(models.Model):
-	mealType = models.CharField(max_length = 50,
-	 choices= DaysMeals.choices(), unique=True)
-	meal = models.CharField(max_length=30)
-	description = models.TextField(blank = True)
-
-
-	def __str__(self):
-		return self.meal + " " + self.mealType

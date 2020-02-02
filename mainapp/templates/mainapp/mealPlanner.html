@@ -10,22 +10,7 @@
      <h1>Meal Planner</h1>
      <div class= "Mealcontainer">
 
-           <div class="MealCalendar"
-              <div class="MondayGrid"> Monday</div>
-              <div class="TuesdayGrid"> Tuesday</div>
-              <div class="WednesdayGrid"> Wednesday</div>
-              <div class="ThursdayGrid"> Thursday</div>
-              <div class="FridayGrid"> Friday</div>
-              <div class="SaturdayGrid"> Saturday</div>
-              <div class="SundayGrid"> Sunday</div>
-           </div>
-
            <table>
-  <caption>Statement Summary</caption>
-  {% for m in meal%}
-    {{m}}
-    {% endfor %}
-
   <thead>
     <tr>
       <th scope="col">Day</th>
@@ -36,50 +21,46 @@
   </thead>
   <tbody>
     <tr>
-      <td data-label="Account">Monday</td>
-      <td data-label="Due Date">
-          {% if m.mealType == MonB %}
-            hi
-          {% endif %}
-      </td>
-      <td data-label="Amount">$1,190</td>
-      <td data-label="Period">03/01/2016 - 03/31/2016</td>
+      <td data-label="Day" class="MealDay">Monday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.monB.id}}'>{% if meals.monB == None %}<a href="{% url 'add meal' 'monB' %}">Add Dish</a>{% else %}{{meals.monB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":monB:{{meals.monB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.monL.id}}'>{% if meals.monL == None %}<a href="{% url 'add meal' 'monL' %}">Add Dish</a>{% else %}{{meals.monL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":monL:{{meals.monL.id}}: "></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.monD.id}}'>{% if meals.monD == None %}<a href="{% url 'add meal' 'monD' %}">Add Dish</a>{% else %}{{meals.monD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":monD:{{meals.monD.id}}: "></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Account">Tuesday</td>
-      <td data-label="Due Date">03/01/2016</td>
-      <td data-label="Amount">$2,443</td>
-      <td data-label="Period">02/01/2016 - 02/29/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Tuesday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.tueB.id}}'>{% if meals.tueB == None %}<a href="{% url 'add meal' 'tueB'%}">Add Dish</a>{% else %}{{meals.tueB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":tueB:{{meals.tueB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.tueL.id}}'>{% if meals.tueL == None %}<a href="{% url 'add meal' 'tueL'%}">Add Dish</a>{% else %}{{meals.tueL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":tueL:{{meals.tueL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.tueD.id}}'>{% if meals.tueD == None %}<a href="{% url 'add meal' 'tueD' %}">Add Dish</a>{% else %}{{meals.tueD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":tueD:{{meals.tueD.id}}:"></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Account">Wednesday</td>
-      <td data-label="Due Date">03/01/2016</td>
-      <td data-label="Amount">$1,181</td>
-      <td data-label="Period">02/01/2016 - 02/29/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Wednesday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.wedB.id}}'>{% if meals.wedB == None %}<a href="{% url 'add meal' 'wedB'%}">Add Dish</a>{% else %}{{meals.wedB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":wedB:{{meals.wedB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.wedL.id}}'>{% if meals.wedL == None %}<a href="{% url 'add meal' 'wedL'%}">Add Dish</a>{% else %}{{meals.wedL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":wedL:{{meals.wedL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.wedD.id}}'>{% if meals.wedD == None %}<a href="{% url 'add meal' 'wedD' %}">Add Dish</a>{% else %}{{meals.wedD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":wedD:{{meals.wedD.id}}:"></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Acount">Thursday</td>
-      <td data-label="Due Date">02/01/2016</td>
-      <td data-label="Amount">$842</td>
-      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Thursday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.thuB.id}}'>{% if meals.thuB == None %}<a href="{% url 'add meal' 'thuB' %}">Add Dish</a>{% else %}{{meals.thuB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":thuB:{{meals.thuB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.thuL.id}}'>{% if meals.thuL == None %}<a href="{% url 'add meal' 'thuL' %}">Add Dish</a>{% else %}{{meals.thuL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":thuL:{{meals.thuL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.thuD.id}}'>{% if meals.thuD == None %}<a href="{% url 'add meal' 'thuD' %}">Add Dish</a>{% else %}{{meals.thuD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":thuD:{{meals.thuD.id}}:"></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Acount">Friday</td>
-      <td data-label="Due Date">02/01/2016</td>
-      <td data-label="Amount">$842</td>
-      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Friday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.friB.id}}'>{% if meals.friB == None %}<a href="{% url 'add meal' 'friB' %}">Add Dish</a>{% else %}{{meals.friB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":friB:{{meals.friB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.friL.id}}'>{% if meals.friL == None %}<a href="{% url 'add meal' 'friL' %}">Add Dish</a>{% else %}{{meals.friL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":friL:{{meals.friL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.friD.id}}'>{% if meals.friD == None %}<a href="{% url 'add meal' 'friD' %}">Add Dish</a>{% else %}{{meals.friD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":friD:{{meals.friD.id}}:"></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Acount">Saturday</td>
-      <td data-label="Due Date">02/01/2016</td>
-      <td data-label="Amount">$842</td>
-      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Saturday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.satB.id}}'>{% if meals.satB == None %}<a href="{% url 'add meal' 'satB' %}">Add Dish</a>{% else %}{{meals.satB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":satB:{{meals.satB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.satL.id}}'>{% if meals.satL == None %}<a href="{% url 'add meal' 'satL' %}">Add Dish</a>{% else %}{{meals.satL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":satL:{{meals.satL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.satD.id}}'>{% if meals.satD == None %}<a href="{% url 'add meal' 'satD' %}">Add Dish</a>{% else %}{{meals.satD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":satD:{{meals.satD.id}}:"></i>{% endif%}</td>
     </tr>
     <tr>
-      <td scope="row" data-label="Acount">Sunday</td>
-      <td data-label="Due Date">02/01/2016</td>
-      <td data-label="Amount">$842</td>
-      <td data-label="Period">01/01/2016 - 01/31/2016</td>
+      <td scope="row" data-label="Day" class="MealDay">Sunday</td>
+      <td data-label="Breakfast" class="Breakfast" id='Link{{meals.sunB.id}}'>{% if meals.sunB == None %}<a href="{% url 'add meal' 'sunB' %}">Add Dish</a>{% else %}{{meals.sunB}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":sunB:{{meals.sunB.id}}:"></i>{% endif%}</td>
+      <td data-label="Lunch" id='Link{{meals.sunL.id}}'>{% if meals.sunL == None %}<a href="{% url 'add meal' 'sunL' %}">Add Dish</a>{% else %}{{meals.sunL}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":sunL:{{meals.sunL.id}}:"></i>{% endif%}</td>
+      <td data-label="Dinner" id='Link{{meals.sunD.id}}'>{% if meals.sunD == None %}<a href="{% url 'add meal' 'sunD' %}">Add Dish</a>{% else %}{{meals.sunD}} <i class="glyphicon glyphicon-remove DeleteMealButton" id=":sunD:{{meals.sunD.id}}:"></i>{% endif%}</td>
     </tr>
   </tbody>
 </table>
