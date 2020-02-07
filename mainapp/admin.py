@@ -4,19 +4,19 @@ from .models import *
 # Register your models here.
 
 class ListAdmin(admin.ModelAdmin):
-    list_display = ['nameOfList', 'get_tasks']
+    list_display = ['nameOfList' ]
 
-    def get_tasks(self, obj):
-        return ", ".join([p.name for p in obj.task.all()])
+    # def get_tasks(self, obj):
+    #     return ", ".join([p.name for p in obj.task.values()])
 
 class FamilyAdmin(admin.ModelAdmin):
-    list_display = ['nameofFamily', 'CurrentMembers', 'CurrentLists']
+    list_display = ['nameofFamily', 'CurrentMembers']
 
     def CurrentMembers(self, obj):
         return ", ".join([p.user.username for p in obj.members.all()])
 
-    def CurrentLists(self, obj):
-        return ", ".join([p.nameOfList for p in obj.lists.all()])
+    # def CurrentLists(self, obj):
+    #     return ", ".join([p.nameOfList for p in obj.lists.values()])
 
 
 # class MealAdmin(admin.ModelAdmin):

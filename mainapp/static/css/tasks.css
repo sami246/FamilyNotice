@@ -1,5 +1,5 @@
 .AddTaskInput{
-  width: 80%;
+  width: 70%;
   border: grey;
   background: rgba(255,255,255,0.7);
   padding: 2vw;
@@ -10,6 +10,23 @@
 
 .taskright{
   margin: 2vw;
+}
+
+#DeleteListButton{
+  display: block;
+  width: 20vw;
+  border: none;
+  background: linear-gradient(120deg, #4169E1, #6495ED, #1E90FF);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+  margin-bottom: -5vh;
+}
+
+#DeleteListButton:hover{
+  background-position: right;
 }
 
 .notcomp{
@@ -71,4 +88,11 @@
 #task p{
   padding: -2vw;
   color: green;
+}
+
+#AddTaskButton{
+  display: inline;
+  height: 9vh;
+  width: 7vw;
+  font-size: 1.6vw;
 }

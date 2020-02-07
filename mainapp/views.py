@@ -10,6 +10,7 @@ from .forms import *
 from django.core.serializers import serialize
 import json
 
+
 # def family_required(f):
 #     def familyCheck(request):
 #         print(request.session.get('family_session', None))
@@ -28,48 +29,120 @@ def index(request):
     }
     return render(request,'mainapp/index.html' ,{})
 
-def login(request):
-	loginForm = LoginForm()
 
-	return render(request,'mainapp/loginPage.html' ,{'form':loginForm,})
+def create_family(request):
+    if request.method == 'POST':
+        form = FamilyForm(request.POST)
+        if form.is_valid():
+            fam = form.save()
+            meal = MealWeek(family=fam)
+            meal.save()
+            fam.mealPlan = meal
+            fam.save()
+            redirect('choose family')
+    Form = FamilyForm()
+    return render(request,'mainapp/createFamily.html' ,{'form': Form,})
+
+def current_members(request):
+    family_session = request.session['family_session']
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    members = Member.objects.filter(family = familyfilter)
+
+    context = {
+        'members' : members
+    }
+    return render(request,'mainapp/currentMembers.html' ,context)
 
 @login_required
 def choose_family(request):
     if request.method == 'POST':
-        print('mans trying to post')
         request.session['family_session'] = request.POST['family']
         return redirect('index')
-    print(request.user)
     user = User.objects.get(username = request.user)
-    print(user)
     mem = Member.objects.get(user = user)
-    print(mem)
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.filter(members = mem)
-    print(familyfilter)
     fam = json.loads(serialize('json', familyfilter))
+	# view will capture a GET parameter q.
+    # url_parameter = request.GET.get("q")
+    # print(url_parameter)
+    # # If url_parameter’s value isn’t None, it means that some string was passed after ?q= and we want to filter for Artist objects containing this string.
+    # if url_parameter:
+    #     item = Family.objects.filter(nameofFamily__icontains=url_parameter)
+    # else:
+    #     item = Family.objects.filter()
+    # if request.is_ajax():
+    #     html = render_to_string(
+    #         template_name="mainapp/fam.html",
+    #         context={"item": item}
+    #     )
+    #     data_dict = {"html_from_view": html}
+    #     # It has a single key html_from_view. This key’s value is going to be the variable html.
+    #     return JsonResponse(data=data_dict, safe=True)
     return render(request,'mainapp/chooseFamily.html', {'families' : fam})
 
 def lists_json(request):
     user = User.objects.get(username = request.user)
-    print(user)
     mem = Member.objects.get(user = user)
     profile_pic = str(mem.profilePic)
     family_session = request.session['family_session']
-    print("the family currently being used is:")
-    print(family_session)
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.get(nameofFamily = family_session)
-    print(familyfilter)
-    print(List.objects.filter(family = familyfilter))
     lists = List.objects.filter(family = familyfilter)
     permission_serialize= json.loads(serialize('json', lists))
     # list(List.objects.values())
+    arr = []
+    for list in lists:
+        arr.append(list.taskCompleted)
 
     return JsonResponse({
         'list' : permission_serialize,
         'pic_url' : profile_pic,
+        'arr': arr,
     })
+
+def search_key(request):
+    user = User.objects.get(username = request.user)
+    mem = Member.objects.get(user = user)
+    familyfilter = Family.objects.filter(members = mem)
+    fam = json.loads(serialize('json', familyfilter))
+    FamKey = request.GET['FamKey']
+    print(FamKey)
+    filter = Family.objects.filter(FamKey = FamKey)
+    filteredfams = json.loads(serialize('json', filter))
+    return render(request,'mainapp/chooseFamily.html', {'families' : fam, 'response' : filteredfams})
+
+def leave_family(request, Fam):
+    user = User.objects.get(username = request.user)
+    mem = Member.objects.get(user = user)
+    family = Family.objects.get(pk=Fam)
+    print(Fam)
+    family.members.remove(mem)
+    return redirect('choose family')
+
+def join_family(request, Fam_id):
+    user = User.objects.get(username = request.user)
+    mem = Member.objects.get(user = user)
+    family = Family.objects.get(pk=Fam_id)
+    print('FAMILY')
+    print(family)
+    family.members.add(mem)
+    family.save()
+    return redirect('choose family')
+
+def create_list(request):
+    if request.method == 'POST':
+        family_session = request.session['family_session']
+        fam = Family.objects.get(nameofFamily = family_session)
+        form = ListForm(request.POST)
+        if form.is_valid():
+            list = form.save()
+            fam.lists.add(list)
+            fam.save()
+            return redirect('tasks', list.id)
+    list = ListForm()
+    context = {'form': list}
+    return render(request,'mainapp/createList.html', context)
 
 def complete_status(request):
     value1 = list(request)
@@ -145,24 +218,16 @@ def tasks(request, List_id):
         print("i am still working")
         # completed = permission_serialize.fields.completed
         print(permission_serialize)
-    return render(request,'mainapp/tasks.html' ,{'tasks' : permission_serialize, 'ListID': List_id})
+    return render(request,'mainapp/tasks.html' ,{'tasks' : permission_serialize, 'ListID': List_id, 'list':instance})
 
 @csrf_exempt
-def delete_list(request):
+def delete_list(request, List_id):
     try:
-        value1 = list(request)
-        print(value1)
-        stvalue = str(value1)
-        splitValue = stvalue.split("'")
-        List_id = int(splitValue[1])
-
+        print(List_id)
         instance = List.objects.get(pk=List_id)
         print(instance)
         instance.delete()
-        return JsonResponse({
-            'response' : 'return response from delete member function',
-            'values' : List_id,
-        })
+        return redirect('todolists')
     except:
         Http404(request)
 
@@ -195,7 +260,7 @@ def todolist(request):
 
     return render(request,'mainapp/todolists.html' ,{})
 
-
+@login_required
 def meal_planner(request):
     family_session = request.session['family_session']
     familyfilter = Family.objects.get(nameofFamily = family_session)
@@ -205,6 +270,7 @@ def meal_planner(request):
     }
     return render(request,'mainapp/mealPlanner.html', context)
 
+@login_required
 def addmeal2(request):
     if request.method == 'POST':
         text = request.POST['text']
@@ -264,6 +330,7 @@ def addmeal2(request):
         # newDay.save()
         return redirect('meal planner')
 
+@login_required
 def deleteMeal(request):
     value1 = list(request)
     stvalue = str(value1)
@@ -279,7 +346,7 @@ def deleteMeal(request):
         'meal_type' : MealTyp,
     })
 
-
+@login_required
 def addmeal(request, meal):
 
     form = MealEntryForm()

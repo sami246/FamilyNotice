@@ -8,19 +8,71 @@
     <div class='BlockContent'>
 
      <h1>Families</h1>
-     <div class= "todocontainer">
+     <div id= "ChooseFamilycontainer">
+       <div class="CFcard" id="ChooseFamilyCard">
+       <h2> Choose a Family to use: </h2>
           <form action="{% url 'choose family' %}" method="POST">
             {% csrf_token %}
             {% if families|length > 0 %}
             {% for family in families %}
-              <input type="radio" name="family" value="{{family.fields.nameofFamily}}"> {{family.fields.nameofFamily}}<br>
-            {% endfor %}
-              <button type="submit"> Use this family </button>
-            {% else %}
-              YOU NEED A FAMILY!
-            {% endif %}
 
+              <div><h3 style="display:inline;"><input style="display:inline; margin:2vw;" type="radio" name="family" value="{{family.fields.nameofFamily}}"> Name: {{family.fields.nameofFamily}} <i style="font-size:2.3vw; color:white; padding-left:1.7vw;"class='fas fa-key'></i> {{family.fields.FamKey}}</h3>
+                <a href="/leave_family/{{family.pk}}/" class="btn btn-info btn-lg" onclick="return confirm('Are you sure you want to leave this family?');" id="LeaveFamilyButton">
+                    <span class="glyphicon glyphicon-remove-circle"></span> Leave this family
+                </a>
+              </div>
+              <!-- /delete_list/{{ListID}}/ -->
+            {% endfor %}
+            <br>
+              <input style="border: 2px solid white;"type ="submit" class=" loginButton" value="Use this family">
+              <!-- <button type="submit" class="form-control"> Use this family </button> -->
+            {% else %}
+              <h3>You need to join or create a family</h3>
+            {% endif %}
+            <br>
           </form>
+        </div>
+        <div class="CFcard" id="SearchFamilyCard">
+          <h2>Join Existing Family:</h2>
+          <form id="SearchKeyForm" type="GET" action="{% url 'search key' %}">
+             Search Family with Key:
+             {% csrf_token %}
+             <input type="text" maxlength="12" minlength="12" title="Twelve A-Z characters" style="width: 200px; display: inline; margin:1.5vw; margin-top:0;" class="KeyInput form-control " name="FamKey">
+             <button type="submit" style="width: 150px; height: 40px; display: inline; border: 2px solid white;" class="loginButton " id= "SearchKeyButton">Submit</button>
+
+           </form>
+
+           {% if response|length > 0 %}
+            {% for fam in response %}
+               <a href="/joinFamily/{{fam.pk}}/"><h3> Click to join --> {{fam.fields.nameofFamily}} </h3></a>
+            {% endfor %}
+           {% else %}
+           <!-- <p>{{fam.fields.nameofFamily}}</p> -->
+           <h3>No Family with that Key</h3>
+
+           {% endif %}
+
+         </div>
+          <!-- <div class="col-6 align-left">
+            <i id="search-icon" class="fas fa-search"></i>
+            <input id="user_input" placeholder="Search" class="form-control">
+          </div>
+
+
+          <div id="replaceable-content">
+            {% block fam %}
+          	{% endblock %}
+          </div> -->
+          <a href="{% url 'create family' %}">
+              <div class="CFcard" id="CreateFamilyCard">
+                  <h3>Create a new Family</h3>
+              </div>
+          </a>
+          <a href="#">
+              <div class="CFcard" id="ShareFamilyCard">
+                  <h3>Share Family Key</h3>
+              </div>
+          </a>
            <!-- $(".family_list").append("<a href='#'>"
            + "<div class='listTile' id=" + data.family[i].pk + "><h1 id='long'>" + data.family[i].fields.nameofFamily + "</h1></div></a>") -->
      </div>

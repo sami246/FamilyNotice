@@ -3,6 +3,7 @@ from django.db import models
 from datetime import datetime
 from django.dispatch import receiver
 from .enums import *
+from django.utils.crypto import get_random_string
 
 # Create your models here.
 class Member(models.Model):
@@ -29,6 +30,16 @@ class Task(models.Model):
 class List(models.Model):
 	nameOfList = models.CharField(max_length=30)
 	task = models.ManyToManyField(Task, blank=True)
+
+	@property
+	def taskCompleted(self):
+		o = List.objects.get(pk = self.id)
+		for group in o.task.all():
+			if group.completed==False:
+				return False
+		return True
+
+
 
 	def __str__(self):
 		# name = self.nameofFamily
@@ -74,9 +85,11 @@ class MealWeek(models.Model):
 	sunL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunL", null=True, default=None, unique=False, blank=True)
 	sunD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunD", null=True, default=None, unique=False, blank=True)
 
-	def __str__(self):
-		return self.family.nameofFamily + " Meal Planner"
+	# def __str__(self):
+	# 	return self.family.nameofFamily + " Meal Planner"
 
+def create_new_ref_number():
+      return get_random_string()
 
 # Create your models here.
 class Family(models.Model):
@@ -84,6 +97,7 @@ class Family(models.Model):
 	members = models.ManyToManyField(Member)
 	lists = models.ManyToManyField(List, blank=True)
 	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE, blank=True, null=True)
+	FamKey = models.CharField(max_length=30, default=create_new_ref_number, unique=True)
 
 	def __str__(self):
 		return self.nameofFamily

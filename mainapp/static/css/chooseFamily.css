@@ -1,0 +1,36 @@
+.CFcard{
+  width: 100%;
+  /* height: 17vw; */
+  overflow: hidden;
+  grid-area: card;
+  border: 5px solid #1E90FF;
+  background-color: #6495ED;
+  border-radius: 15px;
+  padding: 2vw;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 6px 6px 10px 0 rgba(0, 0, 0, 0.19);
+  margin-bottom: 2vw;
+}
+
+#CreateFamilyCard h3{
+  color: white;
+  font-size: 5vw;
+  align-self: center;
+}
+
+#ShareFamilyCard h3{
+  color: white;
+  font-size: 5vw;
+  align-self: center;
+}
+
+#CreateFamilyCard{
+  text-align: center;
+  padding: -5vw;
+  cursor: pointer;
+}
+
+#ShareFamilyCard{
+  text-align: center;
+  padding: -5vw;
+  cursor: pointer;
+}

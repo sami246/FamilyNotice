@@ -1,8 +1,9 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
 <head>
+
 	<meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -13,12 +14,14 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/todolists.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/chooseFamily.css' %}">
 
 	 <script>
 		 $(function(){
@@ -26,43 +29,28 @@
 								 url: "{% url 'List of lists' %}",
 								 success: function(data){
 									 console.log(data)
+
 									for(var i=0;i<data.list.length; i++){
 											var the_id = data.list[i].pk
-											$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
-						          + "<div class='listTile' id=" + data.list[i].pk + "><h1 id='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
-											$(".profile_pic").append("<img src=" + data.pic_url +" class='img-thumbnail' id='item_pic'>")
+											var completed = data.arr[i]
+											// $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+						          // + "<div class='listTile' id=" + data.list[i].pk + "><h1 class='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
+											if (completed == true){
+												$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+							          + "<div class='listTile' id=" + data.list[i].pk + "><h1 style='text-decoration: line-through' id='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
+											}
+											else{
+												$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+							          + "<div class='listTile' id=" + data.list[i].pk + "><h1 id='long'>" + data.list[i].fields.nameOfList + "</div></h1></a>")
+											}
 											// $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
 						          // + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
 
 									}
-
-									$(".DeleteButton").click(function(){
-											var deleteConf = confirm("Are you sure you want to delete this List permanently?");
-											if (deleteConf == true){
-													 console.log($(this).attr("id"))
-													 csrfToken = $('input[name=csrfmiddlewaretoken]').val()
-																 $.ajax({
-																	 url: "{% url 'delete list' %}",
-																	 type : "DELETE",
-																	 dataType: 'json',
-																	 data: $(this).attr('id'),
-																	 beforeSend: function (xhr) {
-																					xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-																	 },
-																	 success: function(data){
-																					console.log(data)
-																					$('#'+data.values+'').remove()
-																					console.log('memeber is deleted')
-																					alert("The employee is deleted!");
-																	 }
-													 })
-											 }
-									 })
-									 //END DELETE
+									$(".profile_pic").append("<img src=" + data.pic_url +" class='img-thumbnail' id='item_pic'>")
 								 }//END DISPLAY TODOLIST
 				})//END OF AJAX1
 							$("#AddTaskButton").click(function(){
-								console.log("Hellow")
 								console.log($(this).attr("value"))
 								var List__ID = $(this).attr("value")
 								 $.ajax({
@@ -72,10 +60,7 @@
 										success: function(data){
 											console.log(data)
 											$(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
-
 										}
-
-
 								 })
 
 							})//END ADD TASK
@@ -148,12 +133,13 @@
 													},
 													success: function(data){
 																 console.log(data)
-																 $('#Link'+data.meal_id+'').html("<a href='/../addmeal/" + data.meal_type +"'>Add Dish</a>")
+																 $('#Link'+data.meal_id+'').html("<a href='/../addmeal/" + data.meal_type +"'>Add Dish <i class='glyphicon glyphicon-plus'></i></a>")
 																 console.log('Task is deleted')
 													}
 										})
 								 }
 			});
+
 	 </script>
 
 </head>
@@ -223,8 +209,8 @@
 					 <li><a href="#">Chores</a></li>
 					 {% if user.is_authenticated %}
 					 <li style="font-weight: bold; border: 2px solid white; padding-left:0.5vw; border-radius: 15px;"><a class="profile_pic"><span class="glyphicon"></span>{{request.user}}</a></li>
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'choose family' %}"><span class="glyphicon"></span>{{request.session.family_session}}</a></li>
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout </a></li>
+					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px; background-color:#6495ED;"><a href="{% url 'choose family' %}"><span class="glyphicon"></span>{{request.session.family_session}}</a></li>
+					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
 					 {% else %}
 					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
 					 <!-- LOGIN -->
@@ -237,12 +223,13 @@
 	<div class="landing">
 
 	{% block content %}
+
 	{% endblock %}
 	</div>
   {% block scripts %}{% endblock %}
 	<br>
 	{% block footer %}
-		<script type="text/javascript" src="{% static "javascript/navbar.js" %}"></script>
+		<script type="text/javascript" src="{% static "javascript/main.js" %}"></script>
 	{% endblock %}
 	<!-- <a href="https://www.freepik.com/free-photos-vectors/business">Business vector created by crosspixel - www.freepik.com</a> -->
 </body>

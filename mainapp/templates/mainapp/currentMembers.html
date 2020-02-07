@@ -1,0 +1,13 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+    <div class='BlockContent'>
+      <div class="current_members">
+         <h1> Current Family Members:</h1>
+         {% for member in members%}
+         <p>{{member}}</p>
+         {% endfor %}
+
+      </div>
+    </div>
+{% endblock %}

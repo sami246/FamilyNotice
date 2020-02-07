@@ -17,15 +17,51 @@ table caption {
   margin: .5em 0 .75em;
 }
 
-.MealDay{
+/* .MealDay{
   background-color: grey;
   color: white;
+} */
+
+.DeleteMealButton{
+  cursor: pointer;
+}
+.BlueNonButton{
+  border: none;
+  background: #4169E1;
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+}
+
+.BlueTop{
+  border: none;
+  background: linear-gradient(180deg,#6495ED ,#4169E1 , #1E90FF);
+  background-size: 200%;
+  color: #fff;
+  outline: grey;
+}
+
+.Breakfast:hover {background-color: #b6e1fc;}
+.Breakfast{
+  background-color: #9dd7fb;
+
+}
+
+.Lunch:hover {background-color: #6cc3f9;}
+.Lunch{
+  background-color: #87cefa;
+}
+
+.Dinner:hover {background-color: #3baff7;}
+.Dinner{
+  background-color: #54b9f8;
 }
 
 table tr {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   padding: .35em;
+
 }
 
 table th,

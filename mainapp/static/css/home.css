@@ -2,7 +2,7 @@ h1{
   margin: 2vw;
   color: #fff;
   font-family: 'Gochi Hand', cursive;
-  font-size: 70px;
+  font-size: 80px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -10,15 +10,16 @@ h2{
   padding: -2vw;
   margin: 2vw;
   font-family: 'Gochi Hand', cursive;
-
-
+  color: white;
+  font-size: 50px;
+  text-shadow: 2px 2px 1px black;
 }
 
 h3{
   margin: 2vw;
   font-family: 'Gochi Hand', cursive;
   color: white;
-  font-size: 45px;
+  font-size: 35px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -44,7 +45,7 @@ nav {
 .nav-links {
   display: flex;
   list-style: none;
-  width: 65%;
+  width: 70%;
   height: 100%;
   justify-content: space-around;
   align-items: center;
@@ -55,7 +56,7 @@ nav {
 .nav-links li a {
   color: white;
   text-decoration: none;
-  font-size: 1.2vw;
+  font-size: 1.5vw;
 }
 
 

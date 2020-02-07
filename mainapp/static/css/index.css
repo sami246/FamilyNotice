@@ -4,18 +4,21 @@
   overflow: hidden;
   cursor: pointer;
   grid-area: tile;
-  border: 7px solid grey;
-  background-color: white;
+  border: 7px solid #1E90FF;
+  background-color: #6495ED;
   border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 6px 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .tile #short{
-  color: #87CEFA;
+  color: white;
+  /* color: #87CEFA; */
   font-size: 4.2vw;
 }
 
 .tile #long{
-  color: #87CEFA;
+  /* color: #87CEFA; */
+  color: white;
   font-size: 3.5vw;
 }
 
