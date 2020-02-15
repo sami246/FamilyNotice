@@ -11,11 +11,27 @@ class Member(models.Model):
 	dateOfBirth = models.DateField(blank = False)
 	userType = models.CharField(max_length = 50,
 	 choices=userType.choices())
+	genderType = models.CharField(max_length = 50,
+	 choices=genderType.choices(), null=True)
 	profilePic = models.ImageField(upload_to = 'static/',
-	 	default = '/static/empty-photo.jpg')
+	 	default = 'static/empty-photo.jpg')
+	points = models.PositiveIntegerField(default="0")
+	tasksCompleted = models.PositiveIntegerField(default="0")
 
 	def __str__(self):
+		str = self.user.username + " : " + self.user.first_name + " " + self.user.last_name
 		return self.user.username
+
+	@property
+	def Level(self):
+		point = self.points
+		return "Level " + str((point//10)+1)
+
+	@property
+	def NumbOfFamilies(self):
+		families = Family.objects.filter(members=self.id)
+		ListOfFamilies = ', '.join(str(e) for e in families)
+		return "Families : " + str(ListOfFamilies)
 
 class Task(models.Model):
 	name = models.CharField(max_length=30)
@@ -91,12 +107,30 @@ class MealWeek(models.Model):
 def create_new_ref_number():
       return get_random_string()
 
+
+class Message(models.Model):
+	author = models.ForeignKey(Member, on_delete= models.PROTECT, related_name='author')
+	message = models.CharField(max_length=200)
+	timePublished = models.DateTimeField(auto_now_add=True)
+	image = models.ImageField(upload_to = 'static/', null=True, blank=True)
+
+	def __str__(self):
+		return self.message
+
+class Chatroom(models.Model):
+	name = models.CharField(max_length=30, default="Family Chatroom")
+	messages = models.ManyToManyField(Message, blank=True)
+
+	def __str__(self):
+		return self.name
+
 # Create your models here.
 class Family(models.Model):
 	nameofFamily = models.CharField(max_length=30)
 	members = models.ManyToManyField(Member)
 	lists = models.ManyToManyField(List, blank=True)
-	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE, blank=True, null=True)
+	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE)
+	chatroom = models.OneToOneField(Chatroom, on_delete=models.CASCADE)
 	FamKey = models.CharField(max_length=30, default=create_new_ref_number, unique=True)
 
 	def __str__(self):

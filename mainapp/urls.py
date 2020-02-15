@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.urls import path, include
 from . import views
+from . import viewsCal
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -37,7 +39,16 @@ urlpatterns = [
     path('joinFamily/<int:Fam_id>/', views.join_family, name="join family"),
     path('leave_family/<int:Fam>/', views.leave_family, name="leave family"),
     path('searchKey/', views.search_key, name="search key"),
+    path('shareKey/', views.share_key, name="share key"),
     path('current_members/', views.current_members, name="current members"),
     path('delete_list/<int:List_id>/', views.delete_list, name='delete list'),
     path('delete_task.json', views.delete_task, name='delete task'),
+    path('chat/', views.chat, name='chat'),
+    path('addMessage/', views.add_message, name='add message'),
+    path('calendar/', viewsCal.get_credentials, name='calendar'),
+
+    path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
+    path('password-reset/done', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), name='password_reset_complete '),
 ]

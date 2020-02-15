@@ -69,4 +69,31 @@
 
 
     </div>
+
+    <script>
+       $(document).on("click", '.DeleteMealButton', function(event) {
+         console.log('delete button clicked right')
+         console.log($(this).attr("id"))
+             var deleteConf = confirm("Are you sure you want to delete this Meal permanently?");
+               if (deleteConf == true){
+                     csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                         $.ajax({
+                           url: "{% url 'delete meal' %}",
+                           type : "DELETE",
+                           dataType: 'json',
+                           data: $(this).attr('id'),
+                           beforeSend: function (xhr) {
+                                  xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                           },
+                           success: function(data){
+                                  console.log(data)
+                                  $('#Link'+data.meal_id+'').html("<a href='/../addmeal/" + data.meal_type +"'>Add Dish <i class='glyphicon glyphicon-plus'></i></a>")
+                                  console.log('Task is deleted')
+                           }
+                     })
+                  }
+       });
+
+
+    </script>
 {% endblock %}

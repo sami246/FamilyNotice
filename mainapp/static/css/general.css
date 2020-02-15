@@ -1,0 +1,62 @@
+.BlockContent{
+  max-width: 75%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3%;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-image: linear-gradient(100deg, #6495ED, #87CEFA);
+
+}
+
+h1{
+  margin: 2vw;
+  color: #fff;
+  font-family: 'Gochi Hand', cursive;
+  font-size: 80px;
+  text-shadow: 2px 2px 1px black;
+}
+
+h2{
+  padding: -2vw;
+  margin: 2vw;
+  font-family: 'Gochi Hand', cursive;
+  color: white;
+  font-size: 50px;
+  text-shadow: 2px 2px 1px black;
+}
+
+h3{
+  margin: 2vw;
+  font-family: 'Gochi Hand', cursive;
+  color: white;
+  font-size: 35px;
+  text-shadow: 2px 2px 1px black;
+}
+
+
+h4{
+  margin: 2vw;
+  font-family: 'Gochi Hand', cursive;
+
+}
+
+
+nav {
+  height: 10vh;
+  background: #5b78c7;
+}
+
+@media (max-width: 858px){
+.landing{
+  margin-top: 5vh;
+}
+}

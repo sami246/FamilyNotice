@@ -4,15 +4,7 @@
 
 {% block content %}
 
-<!-- <nav>
-  <div class="nav-wrapper">
-    <div class="col s12">
-      <a href="{% url 'index' %}" style="color:black;" class="breadcrumb">Home</a>
-      <a href="{% url 'todolists' %}" style="color:black;" class="breadcrumb">To-do-lists</a>
-      <a href="" style="color:black;" class="breadcrumb"> {{list}}</a>
-    </div>
-  </div>
-</nav> -->
+
 
 
      <div class= "taskcontainer">
@@ -69,4 +61,54 @@
          </div>
 
      </div>
+
+     <script>
+       $(document).on("click", '.CompletedButton', function(event) {
+         console.log("Hellow2")
+         console.log($(this).attr("id"))
+          $.ajax({
+             url: "{% url 'complete status' %}",
+             method : "PUT",
+             data: ($(this).attr("id")),
+             beforeSend: function(xhr) {
+                  xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+              },
+             success: function(data){
+               console.log(data)
+               $('.task'+ data.id).remove()
+               if(data.status){
+                 $(".comp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-minus CompletedButton' id='" + data.id + "'></i></div>")
+               }
+               else{
+                 $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
+               }
+             }
+
+          })
+       });
+
+
+       $(document).on("click", '.DeleteTaskButton', function(event) {
+         console.log($(this).attr("id"))
+             var deleteConf = confirm("Are you sure you want to delete this Task permanently?");
+               if (deleteConf == true){
+
+                     csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                         $.ajax({
+                           url: "{% url 'delete task' %}",
+                           type : "DELETE",
+                           dataType: 'json',
+                           data: $(this).attr('id'),
+                           beforeSend: function (xhr) {
+                                  xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                           },
+                           success: function(data){
+                                  console.log(data)
+                                  $('.task'+data.taskID+'').remove()
+                                  console.log('Task is deleted')
+                           }
+                     })
+                  }
+       });
+     </script>
 {% endblock %}

@@ -4,6 +4,21 @@
 
 {% block content %}
 
+    <script>
+
+      $(function(){
+        $("#ShareFamilyFormContainer").hide()
+        $("#ShareKeyButton").click(function(){
+        console.log("Share Clicked")
+        $("#ShareKeyButton").hide()
+
+        $("#ShareFamilyFormContainer").toggle()
+
+      })
+    });
+
+
+    </script>
 
     <div class='BlockContent'>
 
@@ -16,7 +31,7 @@
             {% if families|length > 0 %}
             {% for family in families %}
 
-              <div><h3 style="display:inline;"><input style="display:inline; margin:2vw;" type="radio" name="family" value="{{family.fields.nameofFamily}}"> Name: {{family.fields.nameofFamily}} <i style="font-size:2.3vw; color:white; padding-left:1.7vw;"class='fas fa-key'></i> {{family.fields.FamKey}}</h3>
+              <div><h3 style="display:inline;"><input style="display:inline; margin:2vw;" type="radio" name="family" value="{{family.fields.nameofFamily}}"> Name: {{family.fields.nameofFamily}} <i style="font-size:2vw; color:white; padding-left:1.3vw;"class='fas fa-key'></i> {{family.fields.FamKey}}</h3>
                 <a href="/leave_family/{{family.pk}}/" class="btn btn-info btn-lg" onclick="return confirm('Are you sure you want to leave this family?');" id="LeaveFamilyButton">
                     <span class="glyphicon glyphicon-remove-circle"></span> Leave this family
                 </a>
@@ -68,15 +83,34 @@
                   <h3>Create a new Family</h3>
               </div>
           </a>
-          <a href="#">
+          <div id="ShareKeyButton">
               <div class="CFcard" id="ShareFamilyCard">
                   <h3>Share Family Key</h3>
               </div>
-          </a>
+          </div>
+
+          <div class="CFcard" id="ShareFamilyFormContainer">
+            {% if families|length > 0 %}
+            <form id="sharefamform" role="form" action = "{% url 'share key'%}" method="POST">
+              E-mail list (seperated by commas): <input class="form-control" type="email" id="ShareEmail" name="emails" multiple>
+
+            {% csrf_token %}
+                <label for="shareFamilies">Choose Family key to send (hold ctrl to send multiple):</label>
+                <select id="shareFamilies" name='fam_Key'multiple>
+            {% for family in families %}
+                <option style="align:center;width:200%;"class="form-control" name="familyKey" value="{{family.fields.nameofFamily}}:{{family.fields.FamKey}}" multiple>
+                   Family Name: {{family.fields.nameofFamily}}
+            {% endfor %}
+                </select>
+              <input class="loginButton"type="submit" value="Invite to Family!">
+            </form>
+            {% else %}
+            <h3>You need to join a family to be able to share a key</h3>
+            {% endif %}
+          </div>
            <!-- $(".family_list").append("<a href='#'>"
            + "<div class='listTile' id=" + data.family[i].pk + "><h1 id='long'>" + data.family[i].fields.nameofFamily + "</h1></div></a>") -->
      </div>
-
-
     </div>
+
 {% endblock %}

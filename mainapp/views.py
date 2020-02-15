@@ -9,6 +9,9 @@ from .models import *
 from .forms import *
 from django.core.serializers import serialize
 import json
+from datetime import datetime
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # def family_required(f):
@@ -47,9 +50,12 @@ def current_members(request):
     family_session = request.session['family_session']
     familyfilter = Family.objects.get(nameofFamily = family_session)
     members = Member.objects.filter(family = familyfilter)
-
+    mem = Member.objects.get(user = request.user)
+    FamiliesJoined = Family.objects.filter(members=mem)
+    fam = json.loads(serialize('json', FamiliesJoined))
     context = {
-        'members' : members
+        'members' : members,
+        'fam': family_session,
     }
     return render(request,'mainapp/currentMembers.html' ,context)
 
@@ -63,22 +69,6 @@ def choose_family(request):
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.filter(members = mem)
     fam = json.loads(serialize('json', familyfilter))
-	# view will capture a GET parameter q.
-    # url_parameter = request.GET.get("q")
-    # print(url_parameter)
-    # # If url_parameter’s value isn’t None, it means that some string was passed after ?q= and we want to filter for Artist objects containing this string.
-    # if url_parameter:
-    #     item = Family.objects.filter(nameofFamily__icontains=url_parameter)
-    # else:
-    #     item = Family.objects.filter()
-    # if request.is_ajax():
-    #     html = render_to_string(
-    #         template_name="mainapp/fam.html",
-    #         context={"item": item}
-    #     )
-    #     data_dict = {"html_from_view": html}
-    #     # It has a single key html_from_view. This key’s value is going to be the variable html.
-    #     return JsonResponse(data=data_dict, safe=True)
     return render(request,'mainapp/chooseFamily.html', {'families' : fam})
 
 def lists_json(request):
@@ -99,6 +89,44 @@ def lists_json(request):
         'list' : permission_serialize,
         'pic_url' : profile_pic,
         'arr': arr,
+    })
+
+def chat(request):
+    family_session = request.session['family_session']
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    members = Member.objects.filter(family = familyfilter)
+    chatroom = Chatroom.objects.get(family = familyfilter)
+    messages = Message.objects.filter(chatroom = chatroom)
+    ordered = messages.order_by('timePublished')
+    permission_serialize= json.loads(serialize('json', ordered))
+    user = User.objects.get(username = request.user)
+    mem = Member.objects.get(user = user)
+
+    context ={
+    'messages':permission_serialize,
+    'name' : chatroom,
+    'memId' : mem.id,
+    'members' : members,
+    }
+    return render(request,'mainapp/chat.html', context)
+
+def add_message(request):
+    query = QueryDict(request.body)
+    author = query.get('Author')
+    message = query.get('OutgoingMessage')
+    member = Member.objects.get(id = author)
+    authorName = member.user.first_name
+    OutgoingMessage = Message(author = member, message= message)
+    OutgoingMessage.save()
+    family_session = request.session['family_session']
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    chatroom = Chatroom.objects.get(family = familyfilter)
+    chatroom.messages.add(OutgoingMessage)
+
+    return JsonResponse({
+        'message' : message,
+        'authorName' : authorName,
+        'time' : OutgoingMessage.timePublished,
     })
 
 def search_key(request):
@@ -231,6 +259,23 @@ def delete_list(request, List_id):
     except:
         Http404(request)
 
+def share_key(request):
+    emails = request.POST['emails']
+    email_arr = emails.split(",")
+    print(email_arr)
+    family = request.POST.getlist('fam_Key', False)
+    print('jjjjjjjjjjjjjjjjjjjj')
+    ListOfFamilies = ' \n'.join(str(e) for e in family)
+    print(ListOfFamilies)
+    #send_mail(subject, message, from_email, to_list, failsilently=True)
+    subject = "Join the family on FamilyNotice"
+    message = "You've been invited by " + request.user.first_name + " " + request.user.last_name + " to join FamilyNotice application.\nPlease visit FamilyNotice at http://localhost:8000/chooseFamily/ and use the respective key to join the family you would like to join.\n" + ListOfFamilies + "\nWe hope you enjoy your experience.\nBest, FamilyNotice Team"
+    from_email = settings.EMAIL_HOST_USER
+    # to_list = [user.email]
+    print('Before email send')
+    send_mail(subject=subject, message=message, from_email=from_email, recipient_list=email_arr, fail_silently=False)
+    print('After send email')
+    return redirect('choose family')
 
 @csrf_exempt
 def delete_task(request):

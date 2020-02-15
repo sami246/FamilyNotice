@@ -11,6 +11,11 @@
   margin-bottom: 2vw;
 }
 
+#CreateFamilyCard:hover, #ShareFamilyCard:hover  {
+  transform: scale(0.95, 0.95);
+ -webkit-transition: transform 0.5s ease-in-out;
+}
+
 #CreateFamilyCard h3{
   color: white;
   font-size: 5vw;

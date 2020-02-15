@@ -15,209 +15,95 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/todolists.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/chooseFamily.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/userCard.css' %}">
 
 	 <script>
-		 $(function(){
-				$.ajax({
-								 url: "{% url 'List of lists' %}",
-								 success: function(data){
-									 console.log(data)
+	   $(function(){
+	     $.ajax({
+	              url: "{% url 'List of lists' %}",
+	              success: function(data){
+	                console.log(data)
 
-									for(var i=0;i<data.list.length; i++){
-											var the_id = data.list[i].pk
-											var completed = data.arr[i]
-											// $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
-						          // + "<div class='listTile' id=" + data.list[i].pk + "><h1 class='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
-											if (completed == true){
-												$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
-							          + "<div class='listTile' id=" + data.list[i].pk + "><h1 style='text-decoration: line-through' id='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
-											}
-											else{
-												$(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
-							          + "<div class='listTile' id=" + data.list[i].pk + "><h1 id='long'>" + data.list[i].fields.nameOfList + "</div></h1></a>")
-											}
-											// $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
-						          // + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
+	               for(var i=0;i<data.list.length; i++){
+	                   var the_id = data.list[i].pk
+	                   var completed = data.arr[i]
+	                   // $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+	                   // + "<div class='listTile' id=" + data.list[i].pk + "><h1 class='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
+	                   if (completed == true){
+	                     $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+	                     + "<div class='listTile' id=" + data.list[i].pk + "><h1 style='text-decoration: line-through' id='long'>" + data.list[i].fields.nameOfList + "</h1></div></a>")
+	                   }
+	                   else{
+	                     $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+	                     + "<div class='listTile' id=" + data.list[i].pk + "><h1 id='long'>" + data.list[i].fields.nameOfList + "</div></h1></a>")
+	                   }
+	                   // $(".To_do_list").append("<a href='/tasks/" + the_id + "'>"
+	                   // + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
 
-									}
-									$(".profile_pic").append("<img src=" + data.pic_url +" class='img-thumbnail' id='item_pic'>")
-								 }//END DISPLAY TODOLIST
-				})//END OF AJAX1
-							$("#AddTaskButton").click(function(){
-								console.log($(this).attr("value"))
-								var List__ID = $(this).attr("value")
-								 $.ajax({
-									 	url: "/tasks/" + List__ID + "/",
-										method : "POST",
-										data: $("#AddTaskForm").serializeArray(),
-										success: function(data){
-											console.log(data)
-											$(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
-										}
-								 })
+	               }
+	               // $(".profile_pic").append("<img src=" + data.pic_url + " class='img-thumbnail' id='item_pic'>")
+	              }//END DISPLAY TODOLIST
+	     })//END OF AJAX1
+	           $("#AddTaskButton").click(function(){
+	             console.log($(this).attr("value"))
+	             var List__ID = $(this).attr("value")
+	              $.ajax({
+	                 url: "/tasks/" + List__ID + "/",
+	                 method : "POST",
+	                 data: $("#AddTaskForm").serializeArray(),
+	                 success: function(data){
+	                   console.log(data)
+	                   $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
+	                 }
+	              })
 
-							})//END ADD TASK
-
-
-			})
+	           })//END ADD TASK
 
 
-			$(document).on("click", '.CompletedButton', function(event) {
-				console.log("Hellow2")
-				console.log($(this).attr("id"))
-				 $.ajax({
-						url: "{% url 'complete status' %}",
-						method : "PUT",
-						data: ($(this).attr("id")),
-						beforeSend: function(xhr) {
-								 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-						 },
-						success: function(data){
-							console.log(data)
-							$('.task'+ data.id).remove()
-							if(data.status){
-								$(".comp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-minus CompletedButton' id='" + data.id + "'></i></div>")
-							}
-							else{
-								$(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
-							}
-						}
-
-				 })
-			});
-
-
-			$(document).on("click", '.DeleteTaskButton', function(event) {
-				console.log($(this).attr("id"))
-						var deleteConf = confirm("Are you sure you want to delete this Task permanently?");
-							if (deleteConf == true){
-
-										csrfToken = $('input[name=csrfmiddlewaretoken]').val()
-												$.ajax({
-													url: "{% url 'delete task' %}",
-													type : "DELETE",
-													dataType: 'json',
-													data: $(this).attr('id'),
-													beforeSend: function (xhr) {
-																 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-													},
-													success: function(data){
-																 console.log(data)
-																 $('.task'+data.taskID+'').remove()
-																 console.log('Task is deleted')
-													}
-										})
-								 }
-			});
-
-			$(document).on("click", '.DeleteMealButton', function(event) {
-				console.log('delete button clicked right')
-				console.log($(this).attr("id"))
-						var deleteConf = confirm("Are you sure you want to delete this Meal permanently?");
-							if (deleteConf == true){
-										csrfToken = $('input[name=csrfmiddlewaretoken]').val()
-												$.ajax({
-													url: "{% url 'delete meal' %}",
-													type : "DELETE",
-													dataType: 'json',
-													data: $(this).attr('id'),
-													beforeSend: function (xhr) {
-																 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-													},
-													success: function(data){
-																 console.log(data)
-																 $('#Link'+data.meal_id+'').html("<a href='/../addmeal/" + data.meal_type +"'>Add Dish <i class='glyphicon glyphicon-plus'></i></a>")
-																 console.log('Task is deleted')
-													}
-										})
-								 }
-			});
-
+	   })
 	 </script>
 
 </head>
-<style>
-	.BlockContent{
-		max-width: 75%;
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		padding: 3%;
-	}
-
-	/* .taskleft{
-			grid-area: taskleft;
-			max-width: 800px;
-			margin: auto;
-			padding: 10px;
-			width: 300px;
-			border: 7px solid white;
-			padding: 10px;
-			margin: 10px;
-	} */
-
-	/* .taskright{
-			grid-area: taskright;
-			width: 300px;
-			border: 7px solid white;
-			padding: 10px;
-			margin: 10px;
-	} */
-
-	/* .taskcontainer{
-		display: grid;
-		grid-column-gap: 5vw;
-		padding: 3vw;
-		grid-template-columns:
-			50% 50%;
-		grid-template-areas:
-			'taskleft taskright';
-	} */
-
-	*{
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-
-	body{
-		background-image: linear-gradient(100deg, #6495ED, #87CEFA);
-
-	}
-
-</style>
 <body>
       <!-- NAVIGAATION BAR -->
 			<nav>
-				 <div class="hamburger">
-					 <div class="line"></div>
-					 <div class="line"></div>
-					 <div class="line"></div>
-				 </div>
-				 <ul class="nav-links">
-					 <li><a href="{% url 'index' %}">FamilyNotice</a></li>
-					 <li><a href="{% url 'todolists' %}">To do lists</a></li>
-					 <li><a href="#">Create Event</a></li>
-					 <li><a href="#">Messages</a></li>
-					 <li><a href="#">Chores</a></li>
-					 {% if user.is_authenticated %}
-					 <li style="font-weight: bold; border: 2px solid white; padding-left:0.5vw; border-radius: 15px;"><a class="profile_pic"><span class="glyphicon"></span>{{request.user}}</a></li>
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px; background-color:#6495ED;"><a href="{% url 'choose family' %}"><span class="glyphicon"></span>{{request.session.family_session}}</a></li>
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
-					 {% else %}
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
-					 <!-- LOGIN -->
-					 <li style="font-weight: bold; border: 2px solid white; padding:0.5vw; border-radius: 15px;"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
-					 {% endif %}
-				 </ul>
-			 </nav>
+      <input type="checkbox" id="check">
+      <label for="check" class="checkbtn">
+        <i class="fas fa-bars"></i>
+      </label>
+      <label class="logo "><a href="{% url 'index' %}">FamilyNotice</a></label>
+      <ul>
+        <li><a href="{% url 'todolists' %}">To do lists</a></li>
+        <li><a href="{% url 'calendar' %}">Create Event</a></li>
+        <li><a href="{% url 'chat' %}">Messages</a></li>
+        <li><a href="#">Chores</a></li>
+				{% if user.is_authenticated %}
+				<li ><a class="profile_pic active"><span class="glyphicon"></span>{{request.user}}</a></li>
+				<li ><a class="active" id="chooseFamilyNav" href="{% url 'choose family' %}"><span class="glyphicon"></span>
+					{% if request.session.family_session %}
+					{{request.session.family_session}}
+					{% else %}
+					Choose Family
+					{% endif %}
+						</a>
+				</li>
+				<li ><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+				{% else %}
+				<li ><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
+				<!-- LOGIN -->
+				<li ><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+				{% endif %}
+      </ul>
+    </nav>
   <br>
 	<br>
 	<div class="landing">
