@@ -59,6 +59,13 @@ def current_members(request):
     }
     return render(request,'mainapp/currentMembers.html' ,context)
 
+def chores(request):
+    mem = Member.objects.get(user = request.user)
+    context ={
+    'member' : mem
+    }
+    return render(request,'mainapp/choresKids.html' ,context)
+
 @login_required
 def choose_family(request):
     if request.method == 'POST':
@@ -74,7 +81,6 @@ def choose_family(request):
 def lists_json(request):
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
-    profile_pic = str(mem.profilePic)
     family_session = request.session['family_session']
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.get(nameofFamily = family_session)
@@ -87,7 +93,6 @@ def lists_json(request):
 
     return JsonResponse({
         'list' : permission_serialize,
-        'pic_url' : profile_pic,
         'arr': arr,
     })
 
@@ -139,6 +144,45 @@ def search_key(request):
     filter = Family.objects.filter(FamKey = FamKey)
     filteredfams = json.loads(serialize('json', filter))
     return render(request,'mainapp/chooseFamily.html', {'families' : fam, 'response' : filteredfams})
+
+def location(request):
+    if request.method == "PUT":
+        geolocation = QueryDict(request.body)
+        lat = geolocation.get('lat')
+        long = geolocation.get('long')
+        user = User.objects.get(username = request.user)
+        CurrentMem = Member.objects.get(user = user)
+        CurrentMem.lat = lat
+        CurrentMem.long = long
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y at %H:%M:%S")
+        CurrentMem.timeOfLocation = dt_string
+        CurrentMem.save()
+    user = User.objects.get(username = request.user)
+    mem = Member.objects.get(user = user)
+    family_session = request.session['family_session']
+    fam = Family.objects.get(nameofFamily = family_session)
+    familyMembers = Member.objects.filter(family = fam)
+    famMem = json.loads(serialize('json', familyMembers))
+    context = {
+        'lat' : mem.lat,
+        'long' : mem.long,
+        'time' : mem.timeOfLocation,
+        'inital' : mem.user.first_name[0],
+        'fam' : fam
+    }
+    return render(request,'mainapp/locations.html', context)
+
+def location_of_member(request):
+    id = request.GET['loc_name']
+    print(id)
+    mem = Member.objects.get(id = id)
+    return JsonResponse({
+        'lat' : mem.lat,
+        'long' : mem.long,
+        'time' : mem.timeOfLocation,
+        'inital' : mem.user.first_name[0]
+    })
 
 def leave_family(request, Fam):
     user = User.objects.get(username = request.user)

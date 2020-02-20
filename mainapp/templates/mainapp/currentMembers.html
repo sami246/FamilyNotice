@@ -42,33 +42,28 @@
                 <div class="more-info">
                   <h1>{{member}}</h1>
                   <div class="coords">
-                    <span>{{member.NumbOfFamilies}}</span>
-                    <span>Joined {{member.user.date_joined}}</span>
+                    <!-- <span>{{member.NumbOfFamilies}} </span> -->
+                    <span>Joined {{member.user.date_joined}} </span>
                   </div>
                   <div class="coords">
-                    <span>{{member.userType}}</span>
-                    <span>{{member.dateOfBirth}}</span>
+                    <span>{{member.userType}} </span>
+                    <span>{{member.dateOfBirth}} </span>
                   </div>
                   <div class="stats">
                     <div>
-                      <div class="title">Awards</div>
-                      <i class="fa fa-trophy"></i>
-                      <div class="value">2</div>
+                      <div class="title">Tasks Completed</div>
+                      <i class="fa fa-book"></i>
+                      <div class="value">{{member.TasksComp}}</div>
                     </div>
                     <div>
-                      <div class="title">Matches</div>
-                      <i class="fa fa-gamepad"></i>
-                      <div class="value">27</div>
+                      <div class="title">Messages Sent</div>
+                      <i class="fa fa-comments"></i>
+                      <div class="value">{{member.MessagesSent}}</div>
                     </div>
                     <div>
-                      <div class="title">Pals</div>
+                      <div class="title">Families</div>
                       <i class="fa fa-group"></i>
-                      <div class="value">123</div>
-                    </div>
-                    <div>
-                      <div class="title">Coffee</div>
-                      <i class="fa fa-coffee"></i>
-                      <div class="value infinity">∞</div>
+                      <div class="value">{{member.NumbOfFamilies}}</div>
                     </div>
                   </div>
                 </div>

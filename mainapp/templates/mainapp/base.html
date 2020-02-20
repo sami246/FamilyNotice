@@ -14,6 +14,7 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
@@ -25,6 +26,8 @@
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/userCard.css' %}">
+	 <script src="https://apis.google.com/js/platform.js" async defer></script>
+	 <meta name="google-signin-client_id" content="451953960582-d5j6ughu6tg9tajrb8lvak5b0npuesuv.apps.googleusercontent.com">
 
 	 <script>
 	   $(function(){
@@ -50,7 +53,6 @@
 	                   // + "<div class='listTile' id=" + data.list[i].id + "><h1 id='long'>" + data.list[i].nameOfList + "</h1></div></a>")
 
 	               }
-	               // $(".profile_pic").append("<img src=" + data.pic_url + " class='img-thumbnail' id='item_pic'>")
 	              }//END DISPLAY TODOLIST
 	     })//END OF AJAX1
 	           $("#AddTaskButton").click(function(){
@@ -70,6 +72,7 @@
 
 
 	   })
+
 	 </script>
 
 </head>
@@ -85,9 +88,24 @@
         <li><a href="{% url 'todolists' %}">To do lists</a></li>
         <li><a href="{% url 'calendar' %}">Create Event</a></li>
         <li><a href="{% url 'chat' %}">Messages</a></li>
-        <li><a href="#">Chores</a></li>
+        <li><a href="{% url 'chores' %}">Chores</a></li>
 				{% if user.is_authenticated %}
-				<li ><a class="profile_pic active"><span class="glyphicon"></span>{{request.user}}</a></li>
+				<li ><a class="profile_pic active"><span class="glyphicon">
+					{% if request.user.member.genderType == 'Male' %}
+						{% if request.user.member.userType == "Guardian" %}
+					<img src="https://image.flaticon.com/icons/svg/145/145859.svg" width="40" height="40">
+						{% else %}
+					<img src="https://image.flaticon.com/icons/svg/145/145867.svg" width="40" height="40">
+						{% endif %}
+					{% else %}
+						{% if request.user.member.userType == 'Guardian' %}
+						<img src="https://image.flaticon.com/icons/svg/145/145852.svg" width="40" height="40">
+						{% else %}
+						 <img src="https://image.flaticon.com/icons/svg/145/145866.svg" width="40" height="40">
+						{% endif %}
+						{% endif %}
+
+				</span>{{request.user}}</a></li>
 				<li ><a class="active" id="chooseFamilyNav" href="{% url 'choose family' %}"><span class="glyphicon"></span>
 					{% if request.session.family_session %}
 					{{request.session.family_session}}

@@ -46,6 +46,9 @@ urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('addMessage/', views.add_message, name='add message'),
     path('calendar/', viewsCal.get_credentials, name='calendar'),
+    path('chores/', views.chores, name='chores'),
+    path('findFamily/', views.location, name='location'),
+    path('findFamily2/', views.location_of_member, name='location of member'),
 
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
     path('password-reset/done', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),

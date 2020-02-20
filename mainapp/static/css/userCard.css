@@ -167,13 +167,17 @@
 }
 
 .card .additional .stats div.value {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  line-height: 1.5rem;
+  line-height: 3rem;
+
 }
 
 .card .additional .stats div.value.infinity {
   font-size: 2.5rem;
+}
+.card .additional .stats .fa {
+  padding: 1rem;
 }
 
 .card .general {
@@ -184,15 +188,16 @@
   right: 0;
   z-index: 1;
   box-sizing: border-box;
-  padding: 1rem;
+  padding: 0;
   padding-top: 0;
 }
 
+
 .card .general .more {
   position: absolute;
-  bottom: 1rem;
+  top: 1rem;
   right: 1rem;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .UserCards{

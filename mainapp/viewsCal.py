@@ -16,6 +16,9 @@ from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 def get_credentials(request):
+    if request.method == "POST":
+        google = request.POST['google']
+        print(google)
     scopes = ['https://www.googleapis.com/auth/calendar']
     try:
         credentials = pickle.load(open("token.pkl", "rb"))

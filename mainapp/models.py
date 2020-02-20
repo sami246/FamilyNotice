@@ -3,7 +3,9 @@ from django.db import models
 from datetime import datetime
 from django.dispatch import receiver
 from .enums import *
-from django.utils.crypto import get_random_string
+import json
+from django.core.serializers import serialize
+
 
 # Create your models here.
 class Member(models.Model):
@@ -17,6 +19,11 @@ class Member(models.Model):
 	 	default = 'static/empty-photo.jpg')
 	points = models.PositiveIntegerField(default="0")
 	tasksCompleted = models.PositiveIntegerField(default="0")
+	auth = models.CharField(max_length = 50)
+	currentLocation = models.CharField(max_length = 50, null=True, blank=True)
+	long = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+	lat = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+	timeOfLocation = models.CharField(max_length = 50,null=True, blank=True)
 
 	def __str__(self):
 		str = self.user.username + " : " + self.user.first_name + " " + self.user.last_name
@@ -30,8 +37,25 @@ class Member(models.Model):
 	@property
 	def NumbOfFamilies(self):
 		families = Family.objects.filter(members=self.id)
-		ListOfFamilies = ', '.join(str(e) for e in families)
-		return "Families : " + str(ListOfFamilies)
+		# ListOfFamilies = ', '.join(str(e) for e in families)
+		# return "Families : " + str(ListOfFamilies)
+		return len(families)
+
+	@property
+	def MessagesSent(self):
+		messages = Message.objects.filter(author=self.id)
+		return len(messages)
+
+	@property
+	def TasksComp(self):
+		tasks = Task.objects.filter(assignTaskTo=self.id).filter(completed=True)
+		return len(tasks)
+
+	@property
+	def Tasks(self):
+		tasks = Task.objects.filter(assignTaskTo=self.id)
+		permission_serialize= json.loads(serialize('json', tasks))
+		return permission_serialize
 
 class Task(models.Model):
 	name = models.CharField(max_length=30)
@@ -39,6 +63,7 @@ class Task(models.Model):
 	date = models.DateTimeField(blank=True, null=True)
 	description = models.TextField(null=True, blank=True)
 	completed = models.BooleanField(default = False)
+	chore = models.BooleanField(default = False)
 
 	def __str__(self):
 		return self.name
@@ -136,9 +161,19 @@ class Family(models.Model):
 	def __str__(self):
 		return self.nameofFamily
 
-	# @property
-	# def numberGroup(self):
-	# 	return
+	@property
+	def nameOfFamilyMembers(self):
+		members = Member.objects.filter(family=self.id)
+		arr = []
+		names = [ [mem.user.first_name, mem.id] for mem in members ]
+		return names
+
+	@property
+	def idOfFamilyMembers(self):
+		members = Member.objects.filter(family=self.id)
+		arr = []
+		names = [ mem.id for mem in members ]
+		return names
 
 class EventEntry(models.Model):
 	title = models.CharField(max_length=30)

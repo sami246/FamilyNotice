@@ -1,0 +1,98 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+    <div class='BlockContent'>
+      <div id="LocationContainer">
+      {% if fam.nameOfFamilyMembers|length > 0 %}
+          <form id="sharelocationform">
+
+          {% csrf_token %}
+              <label for="shareLocation">Choose a family member to view location:</label>
+              <select class="form-control" id="shareLocation" name='loc_name'>
+          {% for mem in fam.nameOfFamilyMembers %}
+              <option class="form-control" name="locName" value="{{mem.1}}">
+                {{mem.0}}
+          {% endfor %}
+              </select>
+            <input  id="searchLocButton" class="loginButton" type="button" value="See this users current position">
+          </form>
+          {% else %}
+          <h3>You need to join a family to be able to see other members location</h3>
+          {% endif %}
+      </div>
+      <br>
+      <div id=map>
+      <img id="mapimg" src="https://maps.googleapis.com/maps/api/staticmap?center={{lat}},{{long}}&zoom=14
+      &size=750x200
+      &key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI
+      &markers=color:blue%7Clabel:{{inital}}%7C{{lat}},{{long}}
+      &scale=2  ">
+      <p>Location accurate as of: {{time}} <p>
+      </div>
+    </div>
+
+    <script>
+    $(function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+
+      } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    })
+
+    function showPosition(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      };
+      $.ajax({
+                                url: "{% url 'location' %}",
+                                type: "PUT",
+                                data: pos,
+                                dataType : 'json',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                                },
+                                success: function(data){
+                                       console.log(data)
+                                }
+                              })//END OF AJAX
+    }
+    </script>
+
+    <script>
+      $(document).on("click", '#searchLocButton', function(event) {
+        console.log("Hellow2")
+        console.log($(this).attr("id"))
+        newdata = $('#sharelocationform').serializeArray()
+        console.log(newdata)
+         $.ajax({
+            url: "{% url 'location of member'%}",
+            method : "GET",
+            data: newdata,
+            success: function(data){
+              console.log("I HAVE RETURNED")
+              console.log(data)
+              if(data.lat==null){
+                console.log("NOTHING TO SEE HERE")
+                $( "#map" ).html("<h1>This user has no previous location on the database</h1>")
+              }
+              else{
+                $( "#map" ).html("<img id='mapimg' src='https://maps.googleapis.com/maps/api/staticmap?center=" + data.lat + "," + data.long + "&zoom=14"
+                + "&size=750x200"
+                + "&key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI"
+                + "&markers=color:blue%7Clabel:"+ data.inital + "%7C" + data.lat + "," + data.long
+                + "&scale=2  '>"
+                + "<p>Location accurate as of: " + data.time + "<p>")
+              }
+
+            }
+
+         })
+      });
+    </script>
+
+    <!-- src="https://maps.google.com/maps?&q=51.5252224,-0.035225599999999996&hl=en&z=14&amp;output=embed" -->
+
+{% endblock %}
