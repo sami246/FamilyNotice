@@ -1,6 +1,8 @@
 {% extends "mainapp/base.html" %}
 
 {% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
 <script>
 $(function () {
  var objDiv = document.getElementById("Chat");

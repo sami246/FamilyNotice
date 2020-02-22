@@ -5,40 +5,54 @@
     <div class='BlockContent'>
       <div class="Calendar">
         <h1>Calendar </h1>
-        <p> {{colors}} </p>
-        <h5>{{calArr}} </h5>
-      <h3>  {{calArrCol}} </h3>
-
-
+        <a>Click here if google refuses to connect to your calendar</a>
+        <img id='calHelp' src="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi">
         <a target="_blank" href="https://calendar.google.com/event?action=TEMPLATE&amp;tmeid=M3JhOTIxaTExMDJibzFnOHJzYnRxZm05aTAgZGFudWRhbnVqb25ham9uYUBt&amp;tmsrc=danudanujonajona%40gmail.com"><img border="0" src="https://www.google.com/calendar/images/ext/gc_button1_en-GB.gif"></a>
         <div class="responsive-iframe-container cal-container">
-          <iframe src="https://calendar.google.com/calendar/embed?{%for cal in calArr%}src={{cal}}&amp;{% endfor %}color=%235229A3&amp;color=%23711616&amp;color=%23125A12&amp;color=%23BE6D00&amp; " style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+          <iframe alt="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi" src="https://calendar.google.com/calendar/embed?{%for cal in calArr%}src={{cal}}&amp;{% endfor %}color=%235229A3&amp;color=%23711616&amp;color=%23125A12&amp;color=%23BE6D00&amp; " style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
           <form name="googleForm" action="{% url 'calendar' %}" method="POST">
-            <div name="google" class="g-signin2" data-onsuccess="googleForm"></div>
-
+            <div name="google" class="g-signin2"></div>
+            <!-- data-onsuccess="onSignIn" -->
            </form>
-        <a href="#" onclick="signOut();">Sign out</a>
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
-</script>
       </div>
     </div>
 
-    <script>
+    <!-- <script>
       function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  $
+        var profile = googleUser.getBasicProfile()
+        var data = {
+          Id:  profile.getId(),
+          id_token: googleUser.getAuthResponse().id_token,
+          expires_at: googleUser.getAuthResponse().expires_at,
+        };
+        console.log(data)
+                            var options = new gapi.auth2.SigninOptionsBuilder(
+                            {'scope': 'https://www.googleapis.com/auth/calendar'});
+
+                            googleUser.grant(options).then(
+                                function(success){
+                                  var sd = {token : gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token,};
+
+                                  console.log(sd)
+                                  $.ajax({
+                                    url: "{% url 'google cal user' %}",
+                                    method : "POST",
+                                    data: profile.getId(),
+                                    beforeSend: function (xhr) {
+                                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                                    },
+                                    success: function(data){
+                                      console.log(data)
+                                    }
+                                  })
+                                },
+                                function(fail){
+                                  alert(JSON.stringify({message: "fail", value: fail}));
+                                });
+
+
 }
-    </script>
+    </script> -->
 
 {% endblock %}

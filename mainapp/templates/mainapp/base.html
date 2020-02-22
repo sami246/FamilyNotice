@@ -16,13 +16,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/todolists.css' %}">
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/chooseFamily.css' %}">
-	 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/userCard.css' %}">
@@ -72,6 +66,38 @@
 
 
 	   })
+		 ////Geolocation
+		 $(function getLocation() {
+		 	if (navigator.geolocation) {
+		 		navigator.geolocation.getCurrentPosition(showPosition);
+
+		 	} else {
+		 		x.innerHTML = "Geolocation is not supported by this browser.";
+		 	}
+		 })
+
+		 function showPosition(position) {
+		 	var pos = {
+		 		lat: position.coords.latitude,
+		 		long: position.coords.longitude
+		 	};
+		 	$.ajax({
+		 														url: "{% url 'location' %}",
+		 														type: "PUT",
+		 														data: pos,
+		 														dataType : 'json',
+		 														beforeSend: function(xhr) {
+		 																xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+		 														},
+		 														success: function(data){
+		 																	 console.log(data)
+		 																	 console.log('Location Updated');
+		 														}
+		 													})//END OF AJAX
+		 }
+
+
+
 
 	 </script>
 
@@ -86,7 +112,7 @@
       <label class="logo "><a href="{% url 'index' %}">FamilyNotice</a></label>
       <ul>
         <li><a href="{% url 'todolists' %}">To do lists</a></li>
-        <li><a href="{% url 'calendar' %}">Create Event</a></li>
+        <li><a href="{% url 'calendar' %}">Calendar</a></li>
         <li><a href="{% url 'chat' %}">Messages</a></li>
         <li><a href="{% url 'chores' %}">Chores</a></li>
 				{% if user.is_authenticated %}
@@ -114,7 +140,7 @@
 					{% endif %}
 						</a>
 				</li>
-				<li ><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+				<li onclick="signOut()"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
 				{% else %}
 				<li ><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up </a></li>
 				<!-- LOGIN -->
@@ -132,9 +158,19 @@
 	</div>
   {% block scripts %}{% endblock %}
 	<br>
-	{% block footer %}
+	<!-- {% block footer %}
 		<script type="text/javascript" src="{% static "javascript/main.js" %}"></script>
-	{% endblock %}
+	{% endblock %} -->
 	<!-- <a href="https://www.freepik.com/free-photos-vectors/business">Business vector created by crosspixel - www.freepik.com</a> -->
 </body>
+
+<script>
+  function signOut() {
+		console.log("Logging out of google")
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
 </html>

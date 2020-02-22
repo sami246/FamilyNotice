@@ -14,51 +14,21 @@ import datefinder
 import timedelta
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2 import id_token
-from google.auth.transport import requests
-
-
-def cal_user(request):
-    # value1 = request.body
-    # stvalue = str(value1)
-    # splitValue = stvalue.split("'")
-    # access_token = splitValue[1]
-    success = request.body
-    print(success)
-
-
-    # Id = query.get('Id')
-    # print(Id)
-    # token = query.get('id_token')
-    # expires_at = query.get('expires_at')
-    # try:
-    #     print('before id info')
-    #     idinfo = id_token.verify_oauth2_token(token, requests.Request(), '451953960582-kfhho1v27s635d283hgi1ehhj7qte836.apps.googleusercontent.com')
-    #     print('after id info')
-    #     if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-    #         raise ValueError('Wrong issuer.')
-    #     userid = idinfo['sub']
-    #     print('VERIFIED')
-    # except ValueError:
-    #     print('FAILLLLLLLLLLL')
-    #     pass
-    return JsonResponse({
-        'something' : 'something'
-    })
 
 def get_credentials(request):
     scopes = ['https://www.googleapis.com/auth/calendar']
-    if request.session['result'] == 'false':
-        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes, redirect_uri='http://localhost:8000/calendar/')
-        credentials = flow.run_local_server()
-        print('#################')
-        print(credentials)
-        service = build("calendar", "v3", credentials=credentials)
-        print('Service: ', service)
-        result = service.calendarList().list().execute()
-        request.session['result'] = result
-    result = request.session['result']
-    print('Result', result)
+    try:
+        credentials = pickle.load(open("token.pkl", "rb"))
+    except:
+        credentials = ""
+    if not credentials:
+        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes)
+        credentials = flow.run_console()
+        pickle.dump(credentials, open("token.pkl", "wb"))
+    print('CRED')
+    print(credentials)
+    service = build("calendar", "v3", credentials=credentials)
+    result = service.calendarList().list().execute()
     numofcalendars = len(result['items'])
     calArrID = [0] * numofcalendars
     calArrCol = [0] * numofcalendars
@@ -69,6 +39,7 @@ def get_credentials(request):
         else:
             calArrID[i] = result['items'][i]['id']
     calendar_id = result['items'][0]['id']
+    result2 = service.events().list(calendarId=calendar_id).execute()
 
     # create_event('25 Feb 12.30pm', service, "Test Meeting using CreateFunction Method",0.5,"dkalpa@email.com.au","Test Description","Mentone, VIC,Australia")
     return render(request,'mainapp/calendar.html' ,{'response' : result, 'calArr':calArrID})

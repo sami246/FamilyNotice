@@ -4,7 +4,7 @@
     <div class='BlockContent'>
       <div class="newFamily">
          <form class = "family-form" role="form" action = "{% url 'create family' %}" method="POST">
-            <h3>Add a new meal:</h3>
+            <h3>Create a new family:</h3>
             {% csrf_token %}
             {{form.as_p}}
             <input type ="submit" style="width: 150px;" class="loginButton" value="Create Family">

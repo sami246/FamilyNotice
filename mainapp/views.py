@@ -32,7 +32,7 @@ def index(request):
     }
     return render(request,'mainapp/index.html' ,{})
 
-
+@login_required
 def create_family(request):
     if request.method == 'POST':
         form = FamilyForm(request.POST)
@@ -46,6 +46,7 @@ def create_family(request):
     Form = FamilyForm()
     return render(request,'mainapp/createFamily.html' ,{'form': Form,})
 
+@login_required
 def current_members(request):
     family_session = request.session['family_session']
     familyfilter = Family.objects.get(nameofFamily = family_session)
@@ -59,6 +60,7 @@ def current_members(request):
     }
     return render(request,'mainapp/currentMembers.html' ,context)
 
+@login_required
 def chores(request):
     mem = Member.objects.get(user = request.user)
     context ={
@@ -76,8 +78,14 @@ def choose_family(request):
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.filter(members = mem)
     fam = json.loads(serialize('json', familyfilter))
+
+    try:
+        print(request.session['result'])
+    except:
+        request.session['result'] = 'false'
     return render(request,'mainapp/chooseFamily.html', {'families' : fam})
 
+@login_required
 def lists_json(request):
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
@@ -96,6 +104,7 @@ def lists_json(request):
         'arr': arr,
     })
 
+@login_required
 def chat(request):
     family_session = request.session['family_session']
     familyfilter = Family.objects.get(nameofFamily = family_session)
@@ -115,6 +124,7 @@ def chat(request):
     }
     return render(request,'mainapp/chat.html', context)
 
+@login_required
 def add_message(request):
     query = QueryDict(request.body)
     author = query.get('Author')
@@ -145,6 +155,7 @@ def search_key(request):
     filteredfams = json.loads(serialize('json', filter))
     return render(request,'mainapp/chooseFamily.html', {'families' : fam, 'response' : filteredfams})
 
+@login_required
 def location(request):
     if request.method == "PUT":
         geolocation = QueryDict(request.body)
@@ -158,6 +169,7 @@ def location(request):
         dt_string = now.strftime("%d/%m/%Y at %H:%M:%S")
         CurrentMem.timeOfLocation = dt_string
         CurrentMem.save()
+        print('Geolocation updated')
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
     family_session = request.session['family_session']
@@ -173,6 +185,7 @@ def location(request):
     }
     return render(request,'mainapp/locations.html', context)
 
+@login_required
 def location_of_member(request):
     id = request.GET['loc_name']
     print(id)
@@ -202,6 +215,7 @@ def join_family(request, Fam_id):
     family.save()
     return redirect('choose family')
 
+@login_required
 def create_list(request):
     if request.method == 'POST':
         family_session = request.session['family_session']
@@ -238,7 +252,7 @@ def complete_status(request):
         'id' : Task_id,
     })
 
-
+from django.contrib.auth.views import LoginView
 
 def register(request):
     if request.method == 'POST':
@@ -259,7 +273,6 @@ def register(request):
         member = Member(user = user, dateOfBirth=DOB, userType = typeU)
         member.save()
         user = authenticate(username=username, password=password)
-        return redirect('login')
     return render(request,'mainapp/register.html')
 
 @login_required
@@ -303,6 +316,7 @@ def delete_list(request, List_id):
     except:
         Http404(request)
 
+@login_required
 def share_key(request):
     emails = request.POST['emails']
     email_arr = emails.split(",")

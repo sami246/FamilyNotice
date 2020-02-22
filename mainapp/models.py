@@ -6,6 +6,8 @@ from .enums import *
 import json
 from django.core.serializers import serialize
 
+import google.oauth2.credentials
+from google.auth import credentials
 
 # Create your models here.
 class Member(models.Model):
@@ -19,8 +21,7 @@ class Member(models.Model):
 	 	default = 'static/empty-photo.jpg')
 	points = models.PositiveIntegerField(default="0")
 	tasksCompleted = models.PositiveIntegerField(default="0")
-	auth = models.CharField(max_length = 50)
-	currentLocation = models.CharField(max_length = 50, null=True, blank=True)
+	cred = google.oauth2.credentials.Credentials('access_token')
 	long = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	lat = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	timeOfLocation = models.CharField(max_length = 50,null=True, blank=True)
@@ -128,7 +129,7 @@ class MealWeek(models.Model):
 
 	# def __str__(self):
 	# 	return self.family.nameofFamily + " Meal Planner"
-
+from django.utils.crypto import get_random_string
 def create_new_ref_number():
       return get_random_string()
 
