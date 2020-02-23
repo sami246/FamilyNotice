@@ -50,8 +50,8 @@ urlpatterns = [
     path('findFamily2/', views.location_of_member, name='location of member'),
 
     path('calendar/', viewsCal.get_credentials, name='calendar'),
-    path('calendarSignIn/', viewsCal.cal_user, name='google cal user'),
-
+    path('SignOutGoogle/', viewsCal.SignOutGoogle, name='SignOutGoogle'),
+    path('calendarAdd/', viewsCal.create_event, name='calendarAdd'),
 
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
     path('password-reset/done', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),

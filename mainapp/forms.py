@@ -19,6 +19,40 @@ class MealEntryForm(forms.ModelForm):
             })
         }
 
+class CalendarForm(forms.ModelForm):
+    class Meta:
+        model = EventEntry
+        fields = ('summary','description', 'location', 'duration', 'start_time')
+        widgets = {
+            'summary': forms.TextInput(attrs={
+                'placeholder' : "Title of New Event",
+                'class' : 'form-control',
+            }),
+            'location': forms.TextInput(attrs={
+                'placeholder' : "Location",
+                'class' : 'form-control',
+            }),
+            'duration': forms.NumberInput(attrs={
+                'placeholder' : "Number",
+                'class' : 'form-control',
+            }),
+            'description' : forms.Textarea(attrs={
+                'placeholder' : "Description of Event",
+                'class' : 'form-control',
+                'rows':5,
+            }),
+            'start_time': forms.TextInput(attrs={
+                'placeholder' : "Start Time",
+                'class' : 'form-control',
+            }),
+
+        }
+        help_texts = {
+            'duration': 'Time Event will last in hours',
+            'start_time' : 'E.g 29th February 3pm'
+        }
+
+
 class ListForm(forms.ModelForm):
     class Meta:
         model = List

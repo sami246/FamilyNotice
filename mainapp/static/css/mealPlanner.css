@@ -78,7 +78,7 @@ table th {
   color: white;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 858px) {
   table {
     border: 0;
   }

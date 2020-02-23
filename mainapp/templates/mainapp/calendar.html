@@ -1,58 +1,76 @@
 {% extends "mainapp/base.html" %}
 
 {% block content %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
 
     <div class='BlockContent'>
-      <div class="Calendar">
-        <h1>Calendar </h1>
-        <a>Click here if google refuses to connect to your calendar</a>
-        <img id='calHelp' src="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi">
-        <a target="_blank" href="https://calendar.google.com/event?action=TEMPLATE&amp;tmeid=M3JhOTIxaTExMDJibzFnOHJzYnRxZm05aTAgZGFudWRhbnVqb25ham9uYUBt&amp;tmsrc=danudanujonajona%40gmail.com"><img border="0" src="https://www.google.com/calendar/images/ext/gc_button1_en-GB.gif"></a>
-        <div class="responsive-iframe-container cal-container">
-          <iframe alt="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi" src="https://calendar.google.com/calendar/embed?{%for cal in calArr%}src={{cal}}&amp;{% endfor %}color=%235229A3&amp;color=%23711616&amp;color=%23125A12&amp;color=%23BE6D00&amp; " style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+      <div class="CalendarPage" >
+        <h1 id="heading">Calendar </h1>
+        <div class="CalTile" id="CalLeft">
+
+            <div class="Calendar">
+              <div class="responsive-iframe-container cal-container">
+                <iframe alt="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi" src="https://calendar.google.com/calendar/embed?src={{Famcalendar}}&amp;{%for cal in calArr%}src={{cal}}&amp;{% endfor %}color=%23711616&amp;color=%23125A12&amp;color=%23BE6D00&amp;color=%235229A3&amp; " style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+              </div>
+            </div>
+
+            <a class="btn btn-info btn-lg calBut" href="{% url 'SignOutGoogle' %}">Sign in as another User</a>
+            <a class="btn btn-info btn-lg calBut" id="DisplayCalAdd">Add Calendar Event</a>
+
+            <a class="btn btn-info btn-sm calBut" id="clickHelpCal">Click here for instructions if google refuses to connect to your calendar</a>
+
+        <a class="btn btn-info btn-sm calBut" id="removeHelp">Remove help</a>
+        <br>
+
         </div>
-          <form name="googleForm" action="{% url 'calendar' %}" method="POST">
-            <div name="google" class="g-signin2"></div>
-            <!-- data-onsuccess="onSignIn" -->
-           </form>
+
+        <div class="CalTile" id="CalRight">
+            <h2 style="margin: 0 0 1vh 0;">Add Calendar Event</h2>
+            <form class = "Add-Cal-form" role="form" action = "{% url 'calendarAdd' %}"  method="POST">
+              {% csrf_token %}
+                  {{form.as_p}}
+                  <!-- <label for="start-time">Start Time:</label>
+
+                  <input class='form-control' type="datetime-local" id="start-time"
+                         name="start-time"> -->
+                  <input type ="submit" class=" loginButton" value="Create a new event">
+            </form>
+        </div>
+        <img id='calHelp' src="https://storage.googleapis.com/support-kms-prod/mNMj6MHrTcKSz3TQfugBBCbSsKMrfxZmzsYi">
       </div>
     </div>
 
-    <!-- <script>
-      function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile()
-        var data = {
-          Id:  profile.getId(),
-          id_token: googleUser.getAuthResponse().id_token,
-          expires_at: googleUser.getAuthResponse().expires_at,
-        };
-        console.log(data)
-                            var options = new gapi.auth2.SigninOptionsBuilder(
-                            {'scope': 'https://www.googleapis.com/auth/calendar'});
+    <script>
 
-                            googleUser.grant(options).then(
-                                function(success){
-                                  var sd = {token : gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token,};
+      $(function(){
+          $("#calHelp").hide()
+          $("#removeHelp").hide()
+          $("#CalRight").hide()
+          $('.CalendarPage').css('display','block')
 
-                                  console.log(sd)
-                                  $.ajax({
-                                    url: "{% url 'google cal user' %}",
-                                    method : "POST",
-                                    data: profile.getId(),
-                                    beforeSend: function (xhr) {
-                                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
-                                    },
-                                    success: function(data){
-                                      console.log(data)
-                                    }
-                                  })
-                                },
-                                function(fail){
-                                  alert(JSON.stringify({message: "fail", value: fail}));
-                                });
+          $("#clickHelpCal").click(function(){
+              $("#clickHelpCal").toggle()
+              console.log("Show Help")
+              $("#removeHelp").toggle()
+              $("#calHelp").toggle()
+            })
+                $("#removeHelp").click(function(){
+                    $("#clickHelpCal").toggle()
+                    console.log("Show Help")
+                    $("#removeHelp").toggle()
+                    $("#calHelp").toggle()
+                  })
+
+            $("#DisplayCalAdd").click(function(){
+                $('.CalendarPage').css('display','grid')
+                $("#CalRight").show()
+                $("#DisplayCalAdd").hide()
+            })
+
+      });
 
 
-}
-    </script> -->
+    </script>
 
 {% endblock %}

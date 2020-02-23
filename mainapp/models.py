@@ -150,6 +150,16 @@ class Chatroom(models.Model):
 	def __str__(self):
 		return self.name
 
+class EventEntry(models.Model):
+	summary = models.CharField(max_length=30)
+	description = models.TextField(blank=True)
+	location = models.CharField(max_length=30, blank=True, null=True)
+	start_time = models.CharField(max_length=50)
+	duration = models.PositiveIntegerField(default="1")
+
+	def __str__(self):
+		return self.summary
+
 # Create your models here.
 class Family(models.Model):
 	nameofFamily = models.CharField(max_length=30)
@@ -158,6 +168,9 @@ class Family(models.Model):
 	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE)
 	chatroom = models.OneToOneField(Chatroom, on_delete=models.CASCADE)
 	FamKey = models.CharField(max_length=30, default=create_new_ref_number, unique=True)
+	cal = models.BooleanField(default=False)
+	calId = models.CharField(max_length=60, null=True, blank=True)
+	calEvents = models.ManyToManyField(EventEntry, blank=True)
 
 	def __str__(self):
 		return self.nameofFamily
@@ -176,16 +189,7 @@ class Family(models.Model):
 		names = [ mem.id for mem in members ]
 		return names
 
-class EventEntry(models.Model):
-	title = models.CharField(max_length=30)
-	membersInvolved = models.ManyToManyField(Member)
-	description = models.TextField()
-	date = models.DateField()
-	location = models.CharField(max_length=30)
-	start_time = models.TimeField()
 
-	def __str__(self):
-		return self.title
 
 class Chores(models.Model):
 	name = models.CharField(max_length=30)

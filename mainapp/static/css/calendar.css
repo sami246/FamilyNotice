@@ -1,0 +1,87 @@
+.CalTile{
+  overflow: hidden;
+  border: 5px solid #87CEFA;
+  background-color: light-blue;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 6px 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 15px;
+  margin: 1vw;
+  color: white;
+}
+
+#CalRight{
+    grid-area: CalRight;
+}
+
+#CalLeft{
+    grid-area: CalLeft;
+}
+
+#heading{
+  grid-area: heading;
+}
+
+.CalendarPage{
+  display: grid;
+  grid-column-gap: 0.1vw;
+  padding: 1vw;
+  width: 100%;
+  grid-template-columns:
+    60% 40%;
+  grid-template-areas:
+    'heading heading'
+    'CalLeft CalRight';
+}
+
+.onlyCal{
+  grid-template-columns:
+    100%;
+  grid-template-areas:
+    'heading'
+    'CalLeft';
+}
+
+.class-form{
+  margin: 1vw;
+}
+
+.loginButton{
+  margin-top:1.3vw;
+}
+
+.CalTile a{
+  margin: 0.5vw;
+  display: grid;
+}
+
+.hidden {display: none;}
+
+.calBut{
+  width: 100%;
+  border: none;
+  background: linear-gradient(120deg, #4169E1, #6495ED, #1E90FF);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.calBut:hover{
+  background-position: right;
+}
+
+@media screen and (max-width: 858px) {
+  .CalendarPage{
+    display: grid;
+    grid-column-gap: 0.1vw;
+    padding: 1vw;
+    width: 100%;
+    grid-template-columns:
+      100%;
+    grid-template-areas:
+      'heading'
+      'CalLeft'
+      'CalRight';
+  }
+}
