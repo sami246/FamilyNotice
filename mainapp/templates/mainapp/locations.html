@@ -1,13 +1,28 @@
 {% extends "mainapp/base.html" %}
 
 {% block content %}
+<style>
+  #map
+{
+    width: 100%;
+    height: 400px; /* or whatever the height of your map is */
+}
+#map img
+{
+    object-fit: cover;
+    width: 100%;
+    height: 100%; /* adjust with media queries for specific height */
+}
+</style>
+
+
     <div class='BlockContent'>
       <div id="LocationContainer">
       {% if fam.nameOfFamilyMembers|length > 0 %}
           <form id="sharelocationform">
 
           {% csrf_token %}
-              <label for="shareLocation">Choose a family member to view location:</label>
+              <label for="shareLocation" style="font-size: 20px;color:white;letter-spacing:0.5px;font-weight: lighter;">Choose a family member to view location:</label>
               <select class="form-control" id="shareLocation" name='loc_name'>
           {% for mem in fam.nameOfFamilyMembers %}
               <option class="form-control" name="locName" value="{{mem.1}}">
@@ -21,15 +36,46 @@
           {% endif %}
       </div>
       <br>
-      <div id=map>
-      <img id="mapimg" src="https://maps.googleapis.com/maps/api/staticmap?center={{lat}},{{long}}&zoom=14
+      <div id='map'>
+      <!-- <img id="mapimg" src="https://maps.googleapis.com/maps/api/staticmap?center={{lat}},{{long}}&zoom=14
       &size=750x200
       &key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI
       &markers=color:blue%7Clabel:{{inital}}%7C{{lat}},{{long}}
-      &scale=2  ">
-      <p>Location accurate as of: {{time}} <p>
+      &scale=2  "> -->
       </div>
+      <p id="time">Location accurate as of: {{time}} <p>
+      <!-- <iframe width="100%" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q={{lat}},{{long}}&key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI"></iframe> -->
     </div>
+
+    <script>
+      var marker;
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat: {{lat}}, lng: {{long}}}
+        });
+
+        marker = new google.maps.Marker({
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: {lat: {{lat}}, lng: {{long}}}
+        });
+        marker.addListener('click', toggleBounce);
+      }
+
+      function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI&callback=initMap">
+    </script>
+
 
     <script>
       $(document).on("click", '#searchLocButton', function(event) {
@@ -46,18 +92,40 @@
                 $("#map").html("<h1>This user has no previous location on the database</h1>")
               }
               else{
-                $("#map").html("<img id='mapimg' src='https://maps.googleapis.com/maps/api/staticmap?center=" + data.lat + "," + data.long + "&zoom=14"
-                + "&size=750x200"
-                + "&key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI"
-                + "&markers=color:blue%7Clabel:"+ data.inital + "%7C" + data.lat + "," + data.long
-                + "&scale=2  '>"
-                + "<p>Location accurate as of: " + data.time + "<p>")
+                // $("#map").html("<img id='mapimg' src='https://maps.googleapis.com/maps/api/staticmap?center=" + data.lat + "," + data.long + "&zoom=14"
+                // + "&size=750x200"
+                // + "&key=AIzaSyCSDjoFRsOh-pakSqWasQZTTdqbvf8uvSI"
+                // + "&markers=color:blue%7Clabel:"+ data.inital + "%7C" + data.lat + "," + data.long
+                // + "&scale=2  '>"
+                // + "<p>Location accurate as of: " + data.time + "<p>")
+                $('#time').html("<p>Location accurate as of: " + data.time + "<p>")
+                var marker;
+                var lat = Number(data.lat);
+                var long = Number(data.long);
+                  var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 13,
+                    center: {lat: lat, lng: long}
+                  });
+
+                  marker = new google.maps.Marker({
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                    position: {lat: lat, lng: long}
+                  });
+                  marker.addListener('click', toggleBounce);
+
+                function toggleBounce() {
+                  if (marker.getAnimation() !== null) {
+                    marker.setAnimation(null);
+                  } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                  }
+                }
               }
             }
          })
       });
     </script>
 
-    <!-- src="https://maps.google.com/maps?&q=51.5252224,-0.035225599999999996&hl=en&z=14&amp;output=embed" -->
 
 {% endblock %}

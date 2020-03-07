@@ -72,12 +72,14 @@
   background: #00BFFF none repeat scroll 0 0;
   color: white;
   float: right;
+  font-size: 2vw;
 }
 
 #pThem{
   background: #6495ED none repeat scroll 0 0;
   float: left;
   color: white;
+  font-size: 2vw;
 }
 
 .MessengerName{
@@ -120,4 +122,14 @@
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     background-color: #F5F5F5;
+}
+
+@media screen and (max-width: 858px) {
+#pMe{
+  font-size: 3vw;
+}
+
+#pThem{
+  font-size: 3vw;
+}
 }

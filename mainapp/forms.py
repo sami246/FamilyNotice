@@ -19,6 +19,58 @@ class MealEntryForm(forms.ModelForm):
             })
         }
 
+class RewardForm(forms.ModelForm):
+    class Meta:
+        model = Rewards
+        fields = ('name', 'pointsNeeded')
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'placeholder' : "Name of Reward",
+                'class' : 'form-control',
+            }),
+            'pointsNeeded': forms.NumberInput(attrs={
+                'placeholder' : "Points",
+                'class' : 'form-control',
+            }),
+        }
+
+class ChoreForm(forms.ModelForm):
+    class Meta:
+        model = Chores
+        fields = ('name', 'points', 'description', 'dueBy', 'assignChoreTo',)
+        # assignChoreTo = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+        widgets = {
+            'assignChoreTo': forms.CheckboxSelectMultiple(attrs={
+                # 'class' : 'form-control',
+                # 'style' : 'display:inline;'
+            }),
+            'name': forms.TextInput(attrs={
+                'placeholder' : "Name of Chore",
+                'class' : 'form-control',
+            }),
+            'points': forms.NumberInput(attrs={
+                'placeholder' : "Points",
+                'class' : 'form-control',
+            }),
+            'description' : forms.Textarea(attrs={
+                'placeholder' : "Description of Chore",
+                'class' : 'form-control',
+                'rows':3,
+            }),
+            'dueBy' : forms.TextInput(attrs={
+                'placeholder' : 'YYYY-MM-DD HH:MM:SS',
+                'class' : 'form-control',
+            }),
+        }
+        labels = {
+            'dueBy': ('End time (YYYY-MM-DD HH:MM:SS)'),
+        }
+
+        # def __init__(self, *args, **kwargs):
+        #     super(ChoreForm, self).__init__(*args, **kwargs)
+        #     family  = request.session['family_session']
+        #     self.fields['assignChoreTo'].queryset = Member.objects.filter(family=family)
+
 class CalendarForm(forms.ModelForm):
     class Meta:
         model = EventEntry

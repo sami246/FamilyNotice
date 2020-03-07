@@ -50,7 +50,9 @@ class Member(models.Model):
 	@property
 	def TasksComp(self):
 		tasks = Task.objects.filter(assignTaskTo=self.id).filter(completed=True)
-		return len(tasks)
+		chores = Chores.objects.filter(assignChoreTo=self.id).filter(completed=True)
+		num = len(tasks) + len(chores)
+		return num
 
 	@property
 	def Tasks(self):
@@ -143,6 +145,14 @@ class Message(models.Model):
 	def __str__(self):
 		return self.message
 
+	@property
+	def dateFormatted(self):
+		myDate = self.timePublished
+		print('My Date: ', myDate)
+		formatedDate = myDate.strftime("%H:%M %m/%d")
+		print('formated Date: ', formatedDate)
+		return formatedDate
+
 class Chatroom(models.Model):
 	name = models.CharField(max_length=30, default="Family Chatroom")
 	messages = models.ManyToManyField(Message, blank=True)
@@ -160,6 +170,52 @@ class EventEntry(models.Model):
 	def __str__(self):
 		return self.summary
 
+class Rewards(models.Model):
+	name = models.CharField(max_length=30)
+	pointsNeeded = models.PositiveIntegerField()
+
+	def __str__(self):
+		return self.name
+
+class Chores(models.Model):
+	name = models.CharField(max_length=30)
+	points = models.PositiveIntegerField()
+	#May change to enum LATER and then even later add API
+	description = models.TextField(null=True, blank=True)
+	dueBy = models.DateTimeField(null=True, blank=True)
+	assignChoreTo = models.ManyToManyField(Member, blank=True)
+	completed = models.BooleanField(default = False)
+
+	def __str__(self):
+		return self.name
+
+	@property
+	def dateFormatted(self):
+		try:
+			myDate = self.dueBy
+			print('My Date: ', myDate)
+			formatedDate = myDate.strftime("%H:%M | %a %d/%m")
+			print('formated Date: ', formatedDate)
+		except:
+			formatedDate = ""
+		return formatedDate
+
+	@property
+	def nameofAssigned(self):
+		members = Member.objects.filter(chores=self.id)
+		arr = []
+		names = [ mem.user.first_name for mem in members ]
+		return names
+
+
+class ChoreList(models.Model):
+	chores = models.ManyToManyField(Chores, blank=True)
+	rewards = models.ManyToManyField(Rewards, blank=True)
+
+	def __str__(self):
+		string = str(self.family) + " Chore List"
+		return string
+
 # Create your models here.
 class Family(models.Model):
 	nameofFamily = models.CharField(max_length=30)
@@ -171,6 +227,7 @@ class Family(models.Model):
 	cal = models.BooleanField(default=False)
 	calId = models.CharField(max_length=60, null=True, blank=True)
 	calEvents = models.ManyToManyField(EventEntry, blank=True)
+	choreList = models.OneToOneField(ChoreList, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.nameofFamily
@@ -188,18 +245,3 @@ class Family(models.Model):
 		arr = []
 		names = [ mem.id for mem in members ]
 		return names
-
-
-
-class Chores(models.Model):
-	name = models.CharField(max_length=30)
-	reward = models.CharField(max_length=30)
-	#May change to enum LATER and then even later add API
-	description = models.TextField()
-	dueBy = models.DateTimeField()
-	assignChoreTo = models.ForeignKey(Member, on_delete= models.CASCADE, null=True, related_name='assign_chore_to', blank=True)
-	completed = models.BooleanField(default = False)
-
-
-	def __str__(self):
-		return self.name

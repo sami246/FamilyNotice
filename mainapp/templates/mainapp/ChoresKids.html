@@ -1,103 +1,121 @@
 {% extends "mainapp/base.html" %}
 
 {% block content %}
+{% load static %}
+    <script type="text/javascript" src="{% static "javascript/sorttable.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chore.css' %}">
     <div class='BlockContent'>
       <div class="choresKids">
-        <h1 style="display:inline;">Chores and Rewards </h1>
-                {% if member.genderType == 'Female' %}
-                     <div id="singleCard" class="card">
-                {% else %}
-                     <div id="singleCard" class="card green">
-                {% endif %}
-                         <div class="additional">
-                           <div class="user-card">
-                             <div class="level center">
-                               {{member.Level}}
-                             </div>
-                             <div class="points center">
-                               {{member.points}} Points
-                             </div>
-                             {% if member.genderType == 'Male' %}
-                               {% if member.userType == "Guardian" %}
-                             <img src="https://image.flaticon.com/icons/svg/145/145859.svg" width="110" height="110" class="center">
-                               {% else %}
-                             <img src="https://image.flaticon.com/icons/svg/145/145867.svg" width="110" height="110" class="center">
-                               {% endif %}
-                             {% else %}
-                               {% if member.userType == 'Guardian' %}
-                               <img src="https://image.flaticon.com/icons/svg/145/145852.svg" width="110" height="110" class="center">
-                               {% else %}
-                                <img src="https://image.flaticon.com/icons/svg/145/145866.svg" width="110" height="110" class="center">
-                               {% endif %}
-                             {% endif %}
-                           </div>
-                           <div class="more-info">
-                             <h1>{{member}}</h1>
-                             <div class="coords">
-                               <!-- <span>{{member.NumbOfFamilies}} </span> -->
-                               <span>Joined {{member.user.date_joined}} </span>
-                             </div>
-                             <div class="coords">
-                               <span>{{member.userType}} </span>
-                               <span>{{member.dateOfBirth}} </span>
-                             </div>
-                             <div class="stats">
-                               <div>
-                                 <div class="title">Tasks Completed</div>
-                                 <i class="fa fa-book"></i>
-                                 <div class="value">{{member.TasksComp}}</div>
-                               </div>
-                               <div>
-                                 <div class="title">Messages Sent</div>
-                                 <i class="fa fa-comments"></i>
-                                 <div class="value">{{member.MessagesSent}}</div>
-                               </div>
-                               <div>
-                                 <div class="title">Families</div>
-                                 <i class="fa fa-group"></i>
-                                 <div class="value">{{member.NumbOfFamilies}}</div>
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-                         <div class="general">
-                           <h1>{{member}}</h1>
-                           <h3>{{member.user.get_full_name}}</h3>
-                           <h5>{{member.user.email}}</h5>
-                           <span class="more">Mouse over the card for more info</span>
-                         </div>
+        <div class="choresContainer">
+          <h1>Your Chores </h1>
+          <p style="display:inline;">Shown below are the chores for </p><p style="color:white;display:inline;">{{member}} </p>
+              <table class="sortable" style="margin-top:1vw;">
+                 <thead>
+                   <tr>
+                     <th class="BlueTop" scope="col">Chore</th>
+                     <th class="BlueTop" scope="col">Points Worth</th>
+                     <th class="BlueTop" scope="col">Due By</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr>
+                     {% for chore1, chore2 in chores %}
+                     <td data-label="Chore" class="Dinner"> {{ chore1.fields.name }}</td>
+                     <td data-label="Points Worth" class="Lunch">{{ chore1.fields.points }}</td>
+                     <td data-label="Due By" class="Lunch">{{ chore2.dateFormatted}}</td>
+                   </tr>
+                   {% endfor %}
+                 </tbody>
+               </table>
+        </div>
+        <div class="rewardsContainer">
+          <h1>Potential Rewards</h1>
+          <p> Do your best to get points and earn these rewards your gaurdians have set </p>
+          <table class="sortable" style="margin-top:1vw;">
+             <thead>
+               <tr>
+                 <th class="BlueTop" scope="col">Reward</th>
+                 <th class="BlueTop" scope="col">Points Needed</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr>
+                 {% for reward in rewards %}
+                 <td data-label="Reward" class="Lunch"> {{ reward.fields.name }}</td>
+                 <td data-label="Points Needed" class="Dinner">{{ reward.fields.pointsNeeded }}</td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+
+
+
+        </div>
+        {% if member.genderType == 'Female' %}
+             <div id="singleCard" class="card">
+        {% else %}
+             <div id="singleCard" class="card green">
+        {% endif %}
+                 <div class="additional">
+                   <div class="user-card">
+                     <div class="level center">
+                       {{member.Level}}
                      </div>
-                </div>
-                <div class = "taskleft">
-
-                        <div class="notcomp">
-                               <h4> Not Completed </h4>
-                                 {% for task in member.Tasks %}
-                                 {% if task.fields.completed == False %}
-                                 <div class="task{{task.pk}}"id="task">
-                                 {{task.fields.name}}
-                                 <i class="glyphicon glyphicon-remove DeleteTaskButton" id="{{task.pk}}"></i>
-                                 <i class="glyphicon glyphicon-ok CompletedButton" id="{{task.pk}}"></i>
-                                 </div>
-                                 {% endif %}
-                                 {% endfor %}
-
-                         </div>
-
-                         <div class="comp">
-                                <h4>Completed </h4>
-                                {% for task in member.Tasks %}
-                                     {% if task.fields.completed == True %}
-                                    <div class="task{{task.pk}}" id="task">
-                                        {{task.fields.name}}
-                                        <i class="glyphicon glyphicon-remove DeleteTaskButton" id="{{task.pk}}"></i>
-                                        <i class="glyphicon glyphicon-minus CompletedButton" id="{{task.pk}}"></i>
-                                    </div>
-                                     {% endif %}
-                                {% endfor %}
-
-                        </div>
-                  </div>
+                     <div class="points center">
+                       {{member.points}} Points
+                     </div>
+                     {% if member.genderType == 'Male' %}
+                       {% if member.userType == "Guardian" %}
+                     <img src="https://image.flaticon.com/icons/svg/145/145859.svg" width="110" height="110" class="center">
+                       {% else %}
+                     <img src="https://image.flaticon.com/icons/svg/145/145867.svg" width="110" height="110" class="center">
+                       {% endif %}
+                     {% else %}
+                       {% if member.userType == 'Guardian' %}
+                       <img src="https://image.flaticon.com/icons/svg/145/145852.svg" width="110" height="110" class="center">
+                       {% else %}
+                        <img src="https://image.flaticon.com/icons/svg/145/145866.svg" width="110" height="110" class="center">
+                       {% endif %}
+                     {% endif %}
+                   </div>
+                   <div class="more-info">
+                     <h1>{{member}}</h1>
+                     <div class="coords">
+                       <span>Joined {{member.user.date_joined}} </span>
+                     </div>
+                     <div class="coords">
+                       <span>{{member.userType}} </span>
+                       <span>{{member.dateOfBirth}} </span>
+                     </div>
+                     <div class="stats">
+                       <div>
+                         <div class="title">Tasks Completed</div>
+                         <i class="fa fa-book"></i>
+                         <div class="value">{{member.TasksComp}}</div>
+                       </div>
+                       <div>
+                         <div class="title">Messages Sent</div>
+                         <i class="fa fa-comments"></i>
+                         <div class="value">{{member.MessagesSent}}</div>
+                       </div>
+                       <div>
+                         <div class="title">Families</div>
+                         <i class="fa fa-group"></i>
+                         <div class="value">{{member.NumbOfFamilies}}</div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="general">
+                   <h1>{{member}}</h1>
+                   <h3>{{member.user.get_full_name}}</h3>
+                   <h5>{{member.user.email}}</h5>
+                   <span class="more">Mouse over the card for more info</span>
+                 </div>
+             </div>
+        </div>
       </div>
     </div>
 {% endblock %}

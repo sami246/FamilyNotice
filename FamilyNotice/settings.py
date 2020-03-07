@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'FamilyNotice.urls'
@@ -141,3 +142,6 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = "choose family" #redirect view because view is built in
 LOGOUT_REDIRECT_URL = "login" # redirect when user logsout
 LOGIN_URL = "login" #redirect when user needs to login
+
+GEOIP_DATABASE = '/path/to/your/geoip/database/GeoLiteCity.dat'
+GEOIPV6_DATABASE = '/path/to/your/geoip/database/GeoLiteCityv6.dat'

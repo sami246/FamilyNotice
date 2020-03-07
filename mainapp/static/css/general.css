@@ -5,6 +5,8 @@
   margin-left: auto;
   margin-right: auto;
   padding: 3%;
+  padding-bottom: 2.5rem;
+  padding-top: 80px;
 }
 
 *{
@@ -15,7 +17,8 @@
 
 body{
   background-image: linear-gradient(100deg, #6495ED, #87CEFA);
-
+  /* font-family: 'Bubblegum Sans', cursive; */
+  font-family: 'Boogaloo', cursive;
 }
 
 
@@ -23,7 +26,7 @@ h1{
   margin: 2vw;
   color: #fff;
   font-family: 'Gochi Hand', cursive;
-  font-size: 80px;
+  font-size: 60px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -32,7 +35,7 @@ h2{
   margin: 2vw;
   font-family: 'Gochi Hand', cursive;
   color: white;
-  font-size: 50px;
+  font-size: 40px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -40,7 +43,7 @@ h3{
   margin: 2vw;
   font-family: 'Gochi Hand', cursive;
   color: white;
-  font-size: 35px;
+  font-size: 30px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -58,8 +61,29 @@ nav {
 }
 
 
-@media (max-width: 858px){
-.landing{
-  margin-top: 5vh;
+#page-container {
+  position: relative;
+  min-height: 100vh;
 }
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem; /* Footer height */
+  font-size: 8px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1E90FF;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
 }

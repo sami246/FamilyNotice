@@ -9,6 +9,11 @@
   color: white;
 }
 
+label{
+  font-weight: lighter;
+  font-size: 1.5vw;
+}
+
 #CalRight{
     grid-area: CalRight;
 }

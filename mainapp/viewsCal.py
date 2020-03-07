@@ -24,7 +24,10 @@ def cal_user(request):
     })
 
 def get_credentials(request):
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     fam = Family.objects.get(nameofFamily = family_session)
 
     scopes = ['https://www.googleapis.com/auth/calendar']

@@ -56,33 +56,33 @@ $(function () {
 
       <div id="Chat">
         <div class="MessageView">
-          {% for message in messages %}
-            {% if message.fields.author == memId %}
+          {% for message1, message2 in messages %}
+            {% if message1.fields.author == memId %}
               <div id="MessageMe" class="MessageContainer">
                 <div class="messagep" id="pMe">
                 {% for member in members%}
-                  {% if member.id == message.fields.author %}
+                  {% if member.id == message1.fields.author %}
                   <p class="MessengerName"> {{member.user.first_name}} </p>
                   {% endif %}
                 {% endfor %}
-                  <p>{{message.fields.message}}</p>
+                  <p>{{message1.fields.message}}</p>
                   </div>
                   <br>
-                  <span class="time" id="timeMe">{{message.fields.timePublished }}</span>
+                  <span class="time" id="timeMe">{{message2.dateFormatted }}</span>
               </div>
               <br>
             {% else %}
             <div id="MessageThem" class="MessageContainer">
               <div class="messagep" id="pThem">
               {% for member in members%}
-                {% if member.id == message.fields.author %}
+                {% if member.id == message1.fields.author %}
                 <p class="MessengerName"> {{member.user.first_name}} </p>
                 {% endif %}
               {% endfor %}
-                <p >{{message.fields.message}}</p>
+                <p >{{message1.fields.message}}</p>
                 </div>
                 <br>
-                <div class="time" id="timeThem">{{message.fields.timePublished }}</div>
+                <div class="time" id="timeThem">{{message2.dateFormatted }}</div>
             </div>
             <br>
             {% endif %}

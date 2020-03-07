@@ -45,7 +45,11 @@
 
          <a href="{% url 'chores' %}">
          <div class="tile">
-             <h1 id="long">Chores / Assign Chores </h1>
+              {% if request.user.member.userType == "Guardian" %}
+             <h1 id="short">Assign Chores</h1>
+             {% else %}
+             <h1 id="short">Chores</h1>
+             {% endif %}
          </div>
          </a>
 

@@ -1,11 +1,12 @@
 body {
-  font-family: "Open Sans", sans-serif;
-  line-height: 1.25;
+  /* font-family: 'Gochi Hand'; */
+  font-size: 18px;
+  line-height: 1;
 }
 
 table {
   border: 1px solid #ccc;
-  border-collapse: collapse;
+
   margin: 0;
   padding: 0;
   width: 100%;
@@ -13,7 +14,7 @@ table {
 }
 
 table caption {
-  font-size: 1.5em;
+  font-size: 10px;
   margin: .5em 0 .75em;
 }
 
@@ -61,7 +62,7 @@ table tr {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   padding: .35em;
-
+  margin-bottom: .625em;
 }
 
 table th,

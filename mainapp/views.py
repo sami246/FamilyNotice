@@ -14,15 +14,16 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-# def family_required(f):
-#     def familyCheck(request):
+# def family_required(function):
+#     def familyCheck(self):
+#         print('In decorator')
 #         print(request.session.get('family_session', None))
-#         if request.session.get('family_session', None):
-#             print("success")
-#             f(request)
-#             return familyCheck
-#         else:
+#         if not request.session['family_session']:
 #             return redirect('index')
+#         else:
+#             print("success")
+#             function(self)
+#             return familyCheck
 
 # Create your views here.
 @login_required
@@ -41,6 +42,12 @@ def create_family(request):
             meal = MealWeek(family=fam)
             meal.save()
             fam.mealPlan = meal
+            chatroom = Chatroom(family=fam)
+            chatroom.save()
+            fam.chatroom = chatroom
+            chore_List = ChoreList(family=fam)
+            chore_List.save()
+            fam.choreList = chore_List
             fam.save()
             redirect('choose family')
     Form = FamilyForm()
@@ -48,7 +55,10 @@ def create_family(request):
 
 @login_required
 def current_members(request):
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     familyfilter = Family.objects.get(nameofFamily = family_session)
     members = Member.objects.filter(family = familyfilter)
     mem = Member.objects.get(user = request.user)
@@ -62,11 +72,38 @@ def current_members(request):
 
 @login_required
 def chores(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     mem = Member.objects.get(user = request.user)
-    context ={
-    'member' : mem
-    }
-    return render(request,'mainapp/choresKids.html' ,context)
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    chorelist = ChoreList.objects.get(family=familyfilter)
+    rewards = Rewards.objects.filter(chorelist = chorelist)
+    ordered2 = rewards.order_by('pointsNeeded')
+    rewards_serialize= json.loads(serialize('json', ordered2))
+    if mem.userType == "FamilyMember":
+        chores = Chores.objects.filter(assignChoreTo=mem)
+        ordered = chores.order_by('completed')
+        chores_serialize= json.loads(serialize('json', ordered))
+        mylist = zip(chores_serialize, chores)
+        context ={
+        'member' : mem,
+        'chores' : mylist,
+        'rewards' : rewards_serialize,
+        }
+        return render(request,'mainapp/choresKids.html' ,context)
+    else:
+        chores = Chores.objects.filter(chorelist = chorelist)
+        ordered = chores.order_by('completed')
+        chores_serialize= json.loads(serialize('json', ordered))
+        mylist2 = zip(chores_serialize, chores)
+        context ={
+        'member' : mem,
+        'chores' : mylist2,
+        'rewards' : rewards_serialize,
+        }
+        return render(request,'mainapp/choresGuardians.html' ,context)
 
 @login_required
 def choose_family(request):
@@ -89,7 +126,10 @@ def choose_family(request):
 def lists_json(request):
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     # family = Family.objects.get(members = mem)
     familyfilter = Family.objects.get(nameofFamily = family_session)
     lists = List.objects.filter(family = familyfilter)
@@ -106,7 +146,10 @@ def lists_json(request):
 
 @login_required
 def chat(request):
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     familyfilter = Family.objects.get(nameofFamily = family_session)
     members = Member.objects.filter(family = familyfilter)
     chatroom = Chatroom.objects.get(family = familyfilter)
@@ -116,8 +159,10 @@ def chat(request):
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
 
+    mylist = zip(permission_serialize, messages)
+
     context ={
-    'messages':permission_serialize,
+    'messages': mylist,
     'name' : chatroom,
     'memId' : mem.id,
     'members' : members,
@@ -133,7 +178,10 @@ def add_message(request):
     authorName = member.user.first_name
     OutgoingMessage = Message(author = member, message= message)
     OutgoingMessage.save()
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     familyfilter = Family.objects.get(nameofFamily = family_session)
     chatroom = Chatroom.objects.get(family = familyfilter)
     chatroom.messages.add(OutgoingMessage)
@@ -172,7 +220,10 @@ def location(request):
         print('Geolocation updated')
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     fam = Family.objects.get(nameofFamily = family_session)
     familyMembers = Member.objects.filter(family = fam)
     famMem = json.loads(serialize('json', familyMembers))
@@ -187,6 +238,10 @@ def location(request):
 
 @login_required
 def location_of_member(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     id = request.GET['loc_name']
     print(id)
     mem = Member.objects.get(id = id)
@@ -209,8 +264,6 @@ def join_family(request, Fam_id):
     user = User.objects.get(username = request.user)
     mem = Member.objects.get(user = user)
     family = Family.objects.get(pk=Fam_id)
-    print('FAMILY')
-    print(family)
     family.members.add(mem)
     family.save()
     return redirect('choose family')
@@ -218,7 +271,10 @@ def join_family(request, Fam_id):
 @login_required
 def create_list(request):
     if request.method == 'POST':
-        family_session = request.session['family_session']
+        try:
+            family_session = request.session['family_session']
+        except:
+            return redirect('choose family')
         fam = Family.objects.get(nameofFamily = family_session)
         form = ListForm(request.POST)
         if form.is_valid():
@@ -230,15 +286,59 @@ def create_list(request):
     context = {'form': list}
     return render(request,'mainapp/createList.html', context)
 
+def addchore(request):
+    print('IN ADD CHORE')
+    # return redirect('chores')
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
+    if request.method == 'POST':
+        form = ChoreForm(request.POST)
+        if form.is_valid():
+            chore = form.save()
+            familyfilter = Family.objects.get(nameofFamily = family_session)
+            chorelist = ChoreList.objects.get(family=familyfilter)
+            chorelist.chores.add(chore)
+            chorelist.save()
+            return redirect('chores')
+    form = ChoreForm()
+    context = {
+        'form' : form,
+    }
+    return render(request,'mainapp/addChore.html', context)
+
+def addreward(request):
+    print('IN ADD Reward')
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
+    if request.method == 'POST':
+        form = RewardForm(request.POST)
+        if form.is_valid():
+            reward = form.save()
+            familyfilter = Family.objects.get(nameofFamily = family_session)
+            chorelist = ChoreList.objects.get(family=familyfilter)
+            chorelist.rewards.add(reward)
+            chorelist.save()
+            return redirect('chores')
+    form = RewardForm()
+    context = {
+        'form' : form,
+    }
+    return render(request,'mainapp/addReward.html', context)
+
 def complete_status(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     value1 = list(request)
-    print(value1)
     stvalue = str(value1)
     splitValue = stvalue.split("'")
     Task_id = int(splitValue[1])
-
     instance = Task.objects.get(pk=Task_id)
-    print(instance.completed)
     if(instance.completed==True):
         instance.completed = False
         statusChanged = False
@@ -277,13 +377,13 @@ def register(request):
 
 @login_required
 def tasks(request, List_id):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     if request.method == 'POST':
-        print("POST NEW TASK")
         newTask = request.POST['TaskName']
-        print(newTask)
         list = List.objects.get(pk=List_id)
-        print("List:")
-        print(list)
         NewTask = Task(
         name=newTask)
         NewTask.save()
@@ -295,22 +395,15 @@ def tasks(request, List_id):
             'id' : NewTask.id,
         })
     else:
-        print(List_id)
         instance = get_object_or_404(List, pk=List_id)
-        print(instance)
         taskSet = instance.task.all()
         permission_serialize= json.loads(serialize('json', taskSet))
-        print("i am still working")
-        # completed = permission_serialize.fields.completed
-        print(permission_serialize)
     return render(request,'mainapp/tasks.html' ,{'tasks' : permission_serialize, 'ListID': List_id, 'list':instance})
 
 @csrf_exempt
 def delete_list(request, List_id):
     try:
-        print(List_id)
         instance = List.objects.get(pk=List_id)
-        print(instance)
         instance.delete()
         return redirect('todolists')
     except:
@@ -320,32 +413,22 @@ def delete_list(request, List_id):
 def share_key(request):
     emails = request.POST['emails']
     email_arr = emails.split(",")
-    print(email_arr)
     family = request.POST.getlist('fam_Key', False)
-    print('jjjjjjjjjjjjjjjjjjjj')
     ListOfFamilies = ' \n'.join(str(e) for e in family)
-    print(ListOfFamilies)
-    #send_mail(subject, message, from_email, to_list, failsilently=True)
     subject = "Join the family on FamilyNotice"
     message = "You've been invited by " + request.user.first_name + " " + request.user.last_name + " to join FamilyNotice application.\nPlease visit FamilyNotice at http://localhost:8000/chooseFamily/ and use the respective key to join the family you would like to join.\n" + ListOfFamilies + "\nWe hope you enjoy your experience.\nBest, FamilyNotice Team"
     from_email = settings.EMAIL_HOST_USER
-    # to_list = [user.email]
-    print('Before email send')
     send_mail(subject=subject, message=message, from_email=from_email, recipient_list=email_arr, fail_silently=False)
-    print('After send email')
     return redirect('choose family')
 
 @csrf_exempt
 def delete_task(request):
     try:
         value1 = list(request)
-        print(value1)
         stvalue = str(value1)
         splitValue = stvalue.split("'")
         Task_id = int(splitValue[1])
-
         instance = Task.objects.get(pk=Task_id)
-        print(instance)
         instance.delete()
         return JsonResponse({
             'response' : 'return response from delete member function',
@@ -354,9 +437,61 @@ def delete_task(request):
     except:
         Http404(request)
 
+def delete_chore(request):
+    try:
+        value1 = list(request)
+        stvalue = str(value1)
+        splitValue = stvalue.split("'")
+        Chore_id = int(splitValue[1])
+        instance = Chores.objects.get(pk=Chore_id)
+        print(instance)
+        instance.delete()
+        return JsonResponse({
+            'response' : 'return response from delete member function',
+            'ChoreID' : Chore_id,
+        })
+    except:
+        Http404(request)
+
+def delete_reward(request):
+    try:
+        value1 = list(request)
+        stvalue = str(value1)
+        splitValue = stvalue.split("'")
+        RewardID = int(splitValue[1])
+        instance = Rewards.objects.get(pk=RewardID)
+        print(instance)
+        instance.delete()
+        return JsonResponse({
+            'response' : 'return response from delete member function',
+            'RewardID' : RewardID,
+        })
+    except:
+        Http404(request)
+
+def chore_completed(request):
+    value1 = list(request)
+    stvalue = str(value1)
+    splitValue = stvalue.split("'")
+    Chore_id = int(splitValue[1])
+    instance = Chores.objects.get(pk=Chore_id)
+    if instance.completed == True:
+        print('changing to false')
+        instance.completed = False
+    else:
+        instance.completed = True
+    instance.save()
+    return JsonResponse({
+        'response' : 'return response from complete chores',
+    })
+
 
 @login_required
 def todolist(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     context = {
         'response' : 'You are in the index page',
     }
@@ -379,11 +514,12 @@ def addmeal2(request):
         text = request.POST['text']
         desc = request.POST['description']
         type = request.POST['mealType']
-        print('#######################')
-        print(type)
         newMeal = MealDesc(description=desc, text=text)
         newMeal.save()
-        family_session = request.session['family_session']
+        try:
+            family_session = request.session['family_session']
+        except:
+            return redirect('choose family')
         familyfilter = Family.objects.get(nameofFamily = family_session)
         meals = MealWeek.objects.get(family = familyfilter)
         if type == 'monB':
@@ -435,6 +571,10 @@ def addmeal2(request):
 
 @login_required
 def deleteMeal(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     value1 = list(request)
     stvalue = str(value1)
     splitValue = stvalue.split(":")
@@ -451,7 +591,10 @@ def deleteMeal(request):
 
 @login_required
 def addmeal(request, meal):
-
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     form = MealEntryForm()
     context = { 'form' : form, 'meal':meal,}
     print(meal)

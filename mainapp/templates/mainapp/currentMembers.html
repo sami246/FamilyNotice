@@ -7,15 +7,15 @@
 
 <div class='BlockContent'>
   <div class="current_members">
-     <h1> Current Family Members:</h1>
+     <h1 id="Members_h1"> Current Family Members:</h1>
      <div class="UserCards">
 
      {% for member in members%}
 
      {% if member.genderType == 'Female' %}
-          <div id="singleCard" class="card">
+          <div class="card">
      {% else %}
-          <div id="singleCard" class="card green">
+          <div class="card green">
      {% endif %}
               <div class="additional">
                 <div class="user-card">
@@ -82,8 +82,8 @@
      <img src="https://image.flaticon.com/icons/svg/145/145867.svg" width="110" height="110" class="center">
      <img src="https://image.flaticon.com/icons/svg/145/145859.svg" width="110" height="110" class="center"> -->
 
+    </div>
   </div>
 </div>
 
-<div style="display:grid;">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 {% endblock %}

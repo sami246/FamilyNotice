@@ -32,3 +32,7 @@ admin.site.register(MealWeek)
 admin.site.register(MealDesc)
 admin.site.register(Message)
 admin.site.register(Chatroom)
+
+admin.site.register(ChoreList)
+admin.site.register(Chores)
+admin.site.register(Rewards)

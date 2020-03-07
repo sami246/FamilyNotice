@@ -1,0 +1,153 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+{% load static %}
+  <script type="text/javascript" src="{% static "javascript/sorttable.js" %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
+  <div class='BlockContent'>
+    <div class="choresGuardian">
+
+      <div class="choresContainer">
+        <h1>Your Child's Chores </h1>
+        <p style="display:inline;">Shown below are the chores for </p><p style="color:white;display:inline;">{{request.session.family_session}}</p><p style="display:inline;"> family </p>
+            <table class="sortable" style="margin-top:1vw;">
+               <thead>
+                 <tr>
+                   <th class="BlueTop" scope="col">Chore</th>
+                   <th class="BlueTop" scope="col">Points Worth</th>
+                   <th class="BlueTop" scope="col">Assigned To</th>
+                   <th class="BlueTop" scope="col">Due By</th>
+                   <th class="BlueTop" scope="col">Completed?</th>
+                   <th class="BlueTop" scope="col"></th>
+                 </tr>
+               </thead>
+               <tbody>
+                  {% for chore1, chore2 in chores %}
+
+                 <tr class="Chore{{chore1.pk}}" id="{{chore1.pk}}">
+                   <td data-label="Chore" class="Dinner"> {{ chore1.fields.name }}</td>
+                   <td data-label="Points Worth" class="Lunch">{{ chore1.fields.points }}</td>
+                   <td data-label="Assigned To" class="Lunch">{% for c in chore2.nameofAssigned %}{{c}}, {% endfor %}</td>
+                   <td data-label="Due By" class="Lunch">{{ chore2.dateFormatted}}</td>
+                   <td class="Breakfast">
+                     <form">
+                     {% if chore1.fields.completed == True %}
+                        <input class="form-control" name="isCompleted" type="checkbox" id="compl" value="{{chore1.pk}}" checked>
+                      {% else %}
+                        <input class="form-control" name="isCompleted" type="checkbox" id="compl" value= "{{chore1.pk}}">
+                      {% endif %}
+                      </form>
+                    </td>
+                   <td class="Breakfast">
+                     <!-- <button class="" id="{{chore1.pk}}">Update</button> -->
+                     <button class="deleteChoreButton loginButton" id="{{chore1.pk}}">Delete <span class="glyphicon glyphicon-trash"></span></button>
+                   </td>
+                 </tr>
+                 {% endfor %}
+               </tbody>
+             </table>
+             <br>
+             <a href="{% url 'add chore' %}" id="AddChoreButton">
+             <button class="addChoreButton loginButton" >Add Chore </button>
+             </a>
+      </div>
+
+
+    <div class="rewardsContainer">
+      <h1>Potential Rewards</h1>
+      <p style="display:inline;"> Do your best to get points and earn these rewards your gaurdians have set for </p><p style="color:white;display:inline;">{{request.session.family_session}}</p><p style="display:inline;"> family </p>
+      <table class="sortable" style="margin-top:1vw;">
+         <thead>
+           <tr>
+             <th class="BlueTop" scope="col">Reward</th>
+             <th class="BlueTop" scope="col">Points Needed</th>
+             <th class="BlueTop" scope="col"></th>
+           </tr>
+         </thead>
+         <tbody>
+           {% for reward in rewards %}
+           <tr class="Reward{{reward.pk}}" id="{{reward.pk}}">
+             <td data-label="Reward" class="Lunch"> {{ reward.fields.name }}</td>
+             <td data-label="Points Needed" class="Dinner">{{ reward.fields.pointsNeeded }}</td>
+             <td class="Breakfast">
+               <!-- <button class="" id="{{chore1.pk}}">Update</button> -->
+               <button class="deleteRewardButton loginButton" id="{{reward.pk}}">Delete <span class="glyphicon glyphicon-trash"></span></button>
+             </td>
+           </tr>
+           {% endfor %}
+         </tbody>
+       </table>
+       <br>
+       <a href="{% url 'add reward' %}" id="AddRewardButton">
+       <button class="addRewardButton loginButton">Add Reward </button>
+       </a>
+    </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).on("click", '.deleteChoreButton', function(event) {
+          var deleteConf = confirm("Are you sure you want to delete this Chore permanently?");
+            if (deleteConf == true){
+                  csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                  $.ajax({
+                    url: "{% url 'delete chore' %}",
+                    type : "DELETE",
+                    dataType: 'json',
+                    data: $(this).attr('id'),
+                    beforeSend: function (xhr) {
+                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    success: function(data){
+                           console.log(data)
+                           console.log('.Chore'+data.ChoreID+'')
+                           $('.Chore'+data.ChoreID+'').remove()
+                           console.log('Chore is deleted')
+                    }
+              })
+               }
+    });
+
+    $(document).on("click", '.deleteRewardButton', function(event) {
+          var deleteConf = confirm("Are you sure you want to delete this Reward permanently?");
+            if (deleteConf == true){
+                  csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                  $.ajax({
+                    url: "{% url 'delete reward' %}",
+                    type : "DELETE",
+                    dataType: 'json',
+                    data: $(this).attr('id'),
+                    beforeSend: function (xhr) {
+                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    success: function(data){
+                           console.log(data)
+                           console.log('.Reward'+data.RewardID+'')
+                           $('.Reward'+data.RewardID+'').remove()
+                           console.log('Reward is deleted')
+                    }
+              })
+               }
+    });
+
+
+    $(document).on("click", '#compl', function(event) {
+                  csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                  $.ajax({
+                    url: "{% url 'chore completed' %}",
+                    type : "PUT",
+                    dataType: 'json',
+                    data: $(this).attr('value'),
+                    beforeSend: function (xhr) {
+                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    success: function(data){
+                           console.log('Complete updated')
+                    }
+              })
+
+    });
+  </script>
+{% endblock %}

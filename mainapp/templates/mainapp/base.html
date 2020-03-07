@@ -9,6 +9,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>FamilyNotice</title>
 	<link href="https://fonts.googleapis.com/css?family=Gochi+Hand&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Boogaloo&display=swap" rel="stylesheet">
+
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -20,7 +23,8 @@
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
 	 <link rel="stylesheet" type="text/css" href="{% static 'css/userCard.css' %}">
-	 <script src="https://apis.google.com/js/platform.js" async defer></script>
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+
 	 <meta name="google-signin-client_id" content="451953960582-d5j6ughu6tg9tajrb8lvak5b0npuesuv.apps.googleusercontent.com">
 
 	 <script>
@@ -103,6 +107,7 @@
 
 </head>
 <body>
+	<div id="page-container">
       <!-- NAVIGAATION BAR -->
 			<nav>
       <input type="checkbox" id="check">
@@ -162,6 +167,10 @@
 		<script type="text/javascript" src="{% static "javascript/main.js" %}"></script>
 	{% endblock %} -->
 	<!-- <a href="https://www.freepik.com/free-photos-vectors/business">Business vector created by crosspixel - www.freepik.com</a> -->
+	<footer id="footer">
+		Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+	</footer>
+	</div>
 </body>
 
 <script>
