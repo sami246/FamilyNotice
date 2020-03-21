@@ -53,8 +53,7 @@
 	               }
 	              }//END DISPLAY TODOLIST
 	     })//END OF AJAX1
-	           $("#AddTaskButton").click(function(){
-	             console.log($(this).attr("value"))
+ 		 				function ClickSub(){
 	             var List__ID = $(this).attr("value")
 	              $.ajax({
 	                 url: "/tasks/" + List__ID + "/",
@@ -62,12 +61,22 @@
 	                 data: $("#AddTaskForm").serializeArray(),
 	                 success: function(data){
 	                   console.log(data)
-	                   $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
+	                   $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i style='color:white;' class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
 	                 }
 	              })
 
-	           })//END ADD TASK
+	           }//END ADD TASK
 
+
+						 $("#AddTaskButton").click(ClickSub);
+						 //For clicking
+
+						 $("#AddPart").keydown(function(e){
+						     if(e.which === 13){
+						        ClickSub();
+						        return false;
+						     }
+						 });
 
 	   })
 		 ////Geolocation

@@ -10,11 +10,29 @@
 
      <div class= "taskcontainer">
        <div class="taskgrid">
-      <h1 style="margin-top:-2.5vh; margin-bottom:-2.5vh; display: inline"> {{list}}</h1><h2 style="margin-left:-1.3vw; display: inline"> To-do-list</h2>
-      <!-- <i class='glyphicon glyphicon-trash DeleteListButton' onclick="return confirm('Are you sure you want to delete this item?');" id="{{ListID}}"></i> -->
-      <a href="/delete_list/{{ListID}}/" class="btn btn-info btn-lg" onclick="return confirm('Are you sure you want to delete this item?');" id="DeleteListButton">
-          <span class="glyphicon glyphicon-trash" id="{{ListID}}"></span> Delete List
-      </a>
+         <div class = "taskright">
+           <div class = "HeadingPart">
+           <h1 style="margin-top:-2.5vh; margin-bottom:-2.5vh; display: inline"> {{list}}</h1><h2 style="margin-left:-1.3vw; display: inline"> To-do-list</h2>
+           <!-- <i class='glyphicon glyphicon-trash DeleteListButton' onclick="return confirm('Are you sure you want to delete this item?');" id="{{ListID}}"></i> -->
+           <a href="/delete_list/{{ListID}}/" class="btn btn-info btn-lg" onclick="return confirm('Are you sure you want to delete this item?');" id="DeleteListButton">
+               <span class="glyphicon glyphicon-trash" id="{{ListID}}"></span> Delete List
+           </a>
+           </div>
+           <div class="AddPart">
+           <h2> Add Task: </h2>
+           <form id="AddTaskForm">
+              Task:
+              {% csrf_token %}
+              <input type="text" class="AddTaskInput" name="TaskName">
+
+              <button type="button" class="loginButton" id= "AddTaskButton" value="{{ListID}}">Submit</button>
+
+            </form>
+            </div>
+
+
+        </div>
+
          <div class = "taskleft">
 
                  <div class="notcomp">
@@ -46,19 +64,7 @@
 
                  </div>
            </div>
-           <div class = "taskright">
-             <h2> Add Task: </h2>
-             <form id="AddTaskForm">
-                Task:
-                {% csrf_token %}
-                <input type="text" class="AddTaskInput" name="TaskName">
 
-                <button type="submit" class="loginButton" id= "AddTaskButton" value="{{ListID}}">Submit</button>
-
-              </form>
-
-
-          </div>
          </div>
 
      </div>
@@ -78,10 +84,10 @@
                console.log(data)
                $('.task'+ data.id).remove()
                if(data.status){
-                 $(".comp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-minus CompletedButton' id='" + data.id + "'></i></div>")
+                 $(".comp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i style='color:white;' class='glyphicon glyphicon-minus CompletedButton' id='" + data.id + "'></i></div>")
                }
                else{
-                 $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
+                 $(".notcomp").append("<div class='task"+data.id + "' id='task'>" + data.name + "<i class='glyphicon glyphicon-remove DeleteTaskButton' id='" + data.id + "'></i><i style='color:white;' class='glyphicon glyphicon-ok CompletedButton' id='" + data.id + "'></i></div>")
                }
              }
 

@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load static %}
-    <script type="text/javascript" src="{% static "javascript/sorttable.js" %}"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/tasks.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/mealPlanner.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/chore.css' %}">
@@ -11,10 +11,13 @@
         <div class="choresContainer">
           <h1>Your Chores </h1>
           <p style="display:inline;">Shown below are the chores for </p><p style="color:white;display:inline;">{{member}} </p>
-              <table class="sortable" style="margin-top:1vw;">
+          <br>
+          <p style="display:inline;">You currently have </p><p style="color:white;display:inline;">{{member.Currentpoints}} </p><p style="display:inline;"> points to use</p>
+              <table  style="margin-top:1vw;">
                  <thead>
                    <tr>
                      <th class="BlueTop" scope="col">Chore</th>
+                     <th class="BlueTop" scope="col">Description</th>
                      <th class="BlueTop" scope="col">Points Worth</th>
                      <th class="BlueTop" scope="col">Due By</th>
                    </tr>
@@ -22,9 +25,17 @@
                  <tbody>
                    <tr>
                      {% for chore1, chore2 in chores %}
+                     {% if chore1.fields.completed == True %}
+                     <td data-label="Chore" class="Dinner" style="text-decoration: line-through;"> {{ chore1.fields.name }}</td>
+                     <td data-label="Description" class="Dinner" id="desc" style="text-decoration: line-through;"> {{ chore1.fields.description }}</td>
+                     <td data-label="Points Worth" class="Lunch"" style="text-decoration: line-through;">{{ chore1.fields.points }}</td>
+                     <td data-label="Due By" class="Lunch"" style="text-decoration: line-through;">{{ chore2.dateFormatted}}</td>
+                     {% else %}
                      <td data-label="Chore" class="Dinner"> {{ chore1.fields.name }}</td>
+                     <td data-label="Description" class="Dinner" id="desc"> {{ chore1.fields.description }}</td>
                      <td data-label="Points Worth" class="Lunch">{{ chore1.fields.points }}</td>
                      <td data-label="Due By" class="Lunch">{{ chore2.dateFormatted}}</td>
+                     {% endif %}
                    </tr>
                    {% endfor %}
                  </tbody>
@@ -33,26 +44,48 @@
         <div class="rewardsContainer">
           <h1>Potential Rewards</h1>
           <p> Do your best to get points and earn these rewards your gaurdians have set </p>
-          <table class="sortable" style="margin-top:1vw;">
+          <div id="errorClaim"></div>
+          <table  style="margin-top:1vw;">
              <thead>
                <tr>
-                 <th class="BlueTop" scope="col">Reward</th>
-                 <th class="BlueTop" scope="col">Points Needed</th>
+                 <th class="YellowTop" scope="col">Reward</th>
+                 <th class="YellowTop" scope="col">Points Needed</th>
+                 <th class="YellowTop" scope="col"></th>
                </tr>
              </thead>
              <tbody>
                <tr>
                  {% for reward in rewards %}
-                 <td data-label="Reward" class="Lunch"> {{ reward.fields.name }}</td>
-                 <td data-label="Points Needed" class="Dinner">{{ reward.fields.pointsNeeded }}</td>
+                 <td data-label="Reward" class="Rewards1"> {{ reward.fields.name }}</td>
+                 <td data-label="Points Needed" class="Rewards">{{ reward.fields.pointsNeeded }}</td>
+                 <td class="Rewards">
+                   <button class="ClaimRewardButton YellowButton" id="{{reward.pk}}">Claim <span class="glyphicon glyphicon-gift"></span></button>
+                 </td>
                </tr>
                {% endfor %}
              </tbody>
            </table>
 
-
-
         </div>
+        <div class="claimsContainer">
+          <h1>Rewards Claimed</h1>
+          <p> These are the claims your waiting to recieve from your guardian. Be sure to remind them politely </p>
+          <table  style="margin-top:1vw;">
+             <thead>
+               <tr>
+                 <th class="GreenTop" scope="col">Reward Claimed</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr>
+                 {% for c in claim %}
+                 <td data-label="Reward Claimed" class="Chores1"> {{ c }}</td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+        </div>
+
         {% if member.genderType == 'Female' %}
              <div id="singleCard" class="card">
         {% else %}
@@ -91,7 +124,7 @@
                      </div>
                      <div class="stats">
                        <div>
-                         <div class="title">Tasks Completed</div>
+                         <div class="title">Tasks/Chores Completed</div>
                          <i class="fa fa-book"></i>
                          <div class="value">{{member.TasksComp}}</div>
                        </div>
@@ -118,4 +151,26 @@
         </div>
       </div>
     </div>
+
+    <script>
+    $(document).on("click", '.ClaimRewardButton', function(event) {
+      console.log('CLicked claim')
+      var deleteConf = confirm("Are you sure you want to claim this reward permanently? Your points will be taken");
+        if (deleteConf == true){
+                  csrfToken = $('input[name=csrfmiddlewaretoken]').val()
+                  $.ajax({
+                    url: "{% url 'claim' %}",
+                    type : "POST",
+                    dataType: 'json',
+                    data: $(this).attr('id'),
+                    beforeSend: function (xhr) {
+                           xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    success: function(data){
+                      console.log(data)
+                    }
+              })
+            }
+    });
+    </script>
 {% endblock %}

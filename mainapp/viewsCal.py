@@ -35,6 +35,7 @@ def get_credentials(request):
     #Crentials for Family Calendar
     credentialsDanu = pickle.load(open("token.pkl", "rb"))
     serviceDanu = build("calendar", "v3", credentials=credentialsDanu)
+    form = CalendarForm()
     if fam.cal == False:
         summary = fam.nameofFamily + " Family Calendar"
         calendar = {
@@ -44,39 +45,42 @@ def get_credentials(request):
         fam.cal = True
         fam.calId = created_calendar['id']
         fam.save()
+    try:
+        #Crentials for Personal Calendar
+        if request.session['result'] == 'false':
+            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes, redirect_uri='http://localhost:8000/calendar/')
+            credentials = flow.run_local_server()
+            service = build("calendar", "v3", credentials=credentials)
+            result = service.calendarList().list().execute()
+            request.session['result'] = result
+        result = request.session['result']
 
-    #Crentials for Personal Calendar
-    if request.session['result'] == 'false':
-        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes, redirect_uri='http://localhost:8000/calendar/')
-        credentials = flow.run_local_server()
-        service = build("calendar", "v3", credentials=credentials)
-        result = service.calendarList().list().execute()
-        request.session['result'] = result
-    result = request.session['result']
+        #Getting all public calendars from personal Calendar
+        numofcalendars = len(result['items'])
+        calArrID = [0] * (int(numofcalendars))
+        calArrCol = [0] * (int(numofcalendars))
+        #API doesn't work if calendar asked for is contacts because it is not sharable, therefore get rid of it
+        for i in range(0, numofcalendars, 1):
+            # if result['items'][i]['id'] == "addressbook#contacts@group.v.calendar.google.com":
+            if "group.v.calendar.google.com" in result['items'][i]['id']:
+                calArrID[i] = calArrID[0]
+            else:
+                calArrID[i] = result['items'][i]['id']
+        calendar_id = result['items'][0]['id']
 
-    #Getting all public calendars from personal Calendar
-    numofcalendars = len(result['items'])
-    calArrID = [0] * (int(numofcalendars))
-    calArrCol = [0] * (int(numofcalendars))
-    #API doesn't work if calendar asked for is contacts because it is not sharable, therefore get rid of it
-    for i in range(0, numofcalendars, 1):
-        # if result['items'][i]['id'] == "addressbook#contacts@group.v.calendar.google.com":
-        if "group.v.calendar.google.com" in result['items'][i]['id']:
-            calArrID[i] = calArrID[0]
-        else:
-            calArrID[i] = result['items'][i]['id']
-    calendar_id = result['items'][0]['id']
-
-
-    # create_event2('28 Feb 2.30pm', serviceDanu, "Test",0.5,"dkalpa@email.com.au","Test Description","Mentone, VIC,Australia")
-    form = CalendarForm()
-    context = {
-    'response' : result,
-    'calArr':calArrID,
-    'Famcalendar' : fam.calId,
-    'form' : form
-    }
-    return render(request,'mainapp/calendar.html' ,context)
+        context = {
+        'response' : result,
+        'calArr':calArrID,
+        'Famcalendar' : fam.calId,
+        'form' : form
+        }
+        return render(request,'mainapp/calendar.html' ,context)
+    except:
+        context = {
+        'Famcalendar' : fam.calId,
+        'form' : form
+        }
+        return render(request,'mainapp/calendar.html' ,context)
 
 def SignOutGoogle(request):
     request.session['result'] = 'false'

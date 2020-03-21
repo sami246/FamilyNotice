@@ -35,6 +35,7 @@ urlpatterns = [
     path('addchore/', views.addchore, name="add chore"),
     path('addreward/', views.addreward, name="add reward"),
     path('addmeal2', views.addmeal2, name="add meal 2"),
+    path('claim', views.claim, name="claim"),
     path('deleteMeal.json', views.deleteMeal, name="delete meal"),
     path('chooseFamily/', views.choose_family, name="choose family"),
     path('createFamily/', views.create_family, name="create family"),
@@ -51,6 +52,7 @@ urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('addMessage/', views.add_message, name='add message'),
     path('chores/', views.chores, name='chores'),
+    path('accept_claim/', views.accept_claim, name='accept claim'),
     path('findFamily/', views.location, name='location'),
     path('findFamily2/', views.location_of_member, name='location of member'),
 

@@ -5,3 +5,85 @@
 td{
   font-size: 1.5vw;
 }
+
+#desc{
+  font-size: 1vw;
+}
+
+.YellowButton{
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  background: linear-gradient(180deg,#ffad08 ,#ffef08 , #ffc508);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 2px 2px 2px 0 rgba(0, 0, 0, 0.19);
+}
+
+.YellowButton:hover{
+  background-position: right;
+}
+.GreenButton:hover{
+  background-position: right;
+}
+
+.GreenButton{
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  background: linear-gradient(180deg,#6fff26 ,#07e012 , #15f711);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 2px 2px 2px 0 rgba(0, 0, 0, 0.19);
+}
+
+.YellowTop{
+  border: none;
+  background: linear-gradient(180deg,#ffad08 ,#ffef08 , #ffc508);
+  background-size: 200%;
+  color: #fff;
+  outline: grey;
+}
+
+.GreenTop{
+  border: none;
+  background: linear-gradient(180deg,#6fff26 ,#07e012 , #15f711);
+  background-size: 200%;
+  color: #fff;
+  outline: grey;
+}
+
+.Claims:hover {background-color: #b4ff59;}
+.Claims{
+  background-color: #baff66;
+}
+
+.Claims1:hover {background-color: #7eff3d;}
+.Claims1{
+  background-color: #9dff47;
+}
+
+
+.Rewards:hover {background-color: #fff945;}
+.Rewards{
+  background-color: #fff569;
+}
+
+.Rewards1:hover {background-color:#ffdc2e ;}
+.Rewards1{
+  background-color: #fff238;
+}
+
+@media screen and (max-width: 858px) {
+  #desc{
+    font-size: 1.5vw;
+  }
+}

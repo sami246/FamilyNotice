@@ -20,8 +20,9 @@ class Member(models.Model):
 	profilePic = models.ImageField(upload_to = 'static/',
 	 	default = 'static/empty-photo.jpg')
 	points = models.PositiveIntegerField(default="0")
-	tasksCompleted = models.PositiveIntegerField(default="0")
-	cred = google.oauth2.credentials.Credentials('access_token')
+	Currentpoints = models.PositiveIntegerField(default="0")
+	# tasksCompleted = models.PositiveIntegerField(default="0")
+	# cred = google.oauth2.credentials.Credentials('access_token')
 	long = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	lat = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	timeOfLocation = models.CharField(max_length = 50,null=True, blank=True)
@@ -129,8 +130,10 @@ class MealWeek(models.Model):
 	sunL = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunL", null=True, default=None, unique=False, blank=True)
 	sunD = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="sunD", null=True, default=None, unique=False, blank=True)
 
-	# def __str__(self):
-	# 	return self.family.nameofFamily + " Meal Planner"
+	def __str__(self):
+		string = str(self.family) + " Meal Planner"
+		return string
+
 from django.utils.crypto import get_random_string
 def create_new_ref_number():
       return get_random_string()
@@ -158,7 +161,8 @@ class Chatroom(models.Model):
 	messages = models.ManyToManyField(Message, blank=True)
 
 	def __str__(self):
-		return self.name
+		string = str(self.family) + " Chatroom"
+		return string
 
 class EventEntry(models.Model):
 	summary = models.CharField(max_length=30)
@@ -173,6 +177,13 @@ class EventEntry(models.Model):
 class Rewards(models.Model):
 	name = models.CharField(max_length=30)
 	pointsNeeded = models.PositiveIntegerField()
+
+	def __str__(self):
+		return self.name
+
+class ClaimReward(models.Model):
+	name = models.CharField(max_length=30)
+	member = models.CharField(max_length=30)
 
 	def __str__(self):
 		return self.name
@@ -211,6 +222,7 @@ class Chores(models.Model):
 class ChoreList(models.Model):
 	chores = models.ManyToManyField(Chores, blank=True)
 	rewards = models.ManyToManyField(Rewards, blank=True)
+	claim = models.ManyToManyField(ClaimReward, blank=True)
 
 	def __str__(self):
 		string = str(self.family) + " Chore List"
@@ -221,13 +233,13 @@ class Family(models.Model):
 	nameofFamily = models.CharField(max_length=30)
 	members = models.ManyToManyField(Member)
 	lists = models.ManyToManyField(List, blank=True)
-	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE)
-	chatroom = models.OneToOneField(Chatroom, on_delete=models.CASCADE)
+	mealPlan = models.OneToOneField(MealWeek, on_delete=models.CASCADE, null=True)
+	chatroom = models.OneToOneField(Chatroom, on_delete=models.CASCADE, null=True)
 	FamKey = models.CharField(max_length=30, default=create_new_ref_number, unique=True)
 	cal = models.BooleanField(default=False)
 	calId = models.CharField(max_length=60, null=True, blank=True)
 	calEvents = models.ManyToManyField(EventEntry, blank=True)
-	choreList = models.OneToOneField(ChoreList, on_delete=models.CASCADE)
+	choreList = models.OneToOneField(ChoreList, on_delete=models.CASCADE, null=True)
 
 	def __str__(self):
 		return self.nameofFamily

@@ -38,6 +38,8 @@ def create_family(request):
     if request.method == 'POST':
         form = FamilyForm(request.POST)
         if form.is_valid():
+            members = form.cleaned_data['members']
+            print(members)
             fam = form.save()
             meal = MealWeek(family=fam)
             meal.save()
@@ -49,7 +51,9 @@ def create_family(request):
             chore_List.save()
             fam.choreList = chore_List
             fam.save()
-            redirect('choose family')
+            fam.members.set(members)
+            fam.save()
+            return redirect('choose family')
     Form = FamilyForm()
     return render(request,'mainapp/createFamily.html' ,{'form': Form,})
 
@@ -70,40 +74,6 @@ def current_members(request):
     }
     return render(request,'mainapp/currentMembers.html' ,context)
 
-@login_required
-def chores(request):
-    try:
-        family_session = request.session['family_session']
-    except:
-        return redirect('choose family')
-    mem = Member.objects.get(user = request.user)
-    familyfilter = Family.objects.get(nameofFamily = family_session)
-    chorelist = ChoreList.objects.get(family=familyfilter)
-    rewards = Rewards.objects.filter(chorelist = chorelist)
-    ordered2 = rewards.order_by('pointsNeeded')
-    rewards_serialize= json.loads(serialize('json', ordered2))
-    if mem.userType == "FamilyMember":
-        chores = Chores.objects.filter(assignChoreTo=mem)
-        ordered = chores.order_by('completed')
-        chores_serialize= json.loads(serialize('json', ordered))
-        mylist = zip(chores_serialize, chores)
-        context ={
-        'member' : mem,
-        'chores' : mylist,
-        'rewards' : rewards_serialize,
-        }
-        return render(request,'mainapp/choresKids.html' ,context)
-    else:
-        chores = Chores.objects.filter(chorelist = chorelist)
-        ordered = chores.order_by('completed')
-        chores_serialize= json.loads(serialize('json', ordered))
-        mylist2 = zip(chores_serialize, chores)
-        context ={
-        'member' : mem,
-        'chores' : mylist2,
-        'rewards' : rewards_serialize,
-        }
-        return render(request,'mainapp/choresGuardians.html' ,context)
 
 @login_required
 def choose_family(request):
@@ -363,6 +333,7 @@ def register(request):
         password = request.POST['password']
         DOB = request.POST['DOB']
         typeU = request.POST['typeOfUser']
+        gender = request.POST['genderOfUser']
         user = User(
         username=username,
         first_name=first_name,
@@ -370,9 +341,10 @@ def register(request):
         email=email)
         user.set_password(password)
         user.save()
-        member = Member(user = user, dateOfBirth=DOB, userType = typeU)
+        member = Member(user = user, dateOfBirth=DOB, userType = typeU, genderType=gender)
         member.save()
         user = authenticate(username=username, password=password)
+        return redirect('index')
     return render(request,'mainapp/register.html')
 
 @login_required
@@ -453,6 +425,25 @@ def delete_chore(request):
     except:
         Http404(request)
 
+def accept_claim(request):
+        try:
+            value1 = list(request)
+            stvalue = str(value1)
+            splitValue = stvalue.split("'")
+            Claim_id = int(splitValue[1])
+            instance = ClaimReward.objects.get(pk=Claim_id)
+            print(instance)
+            instance.delete()
+            return JsonResponse({
+                'response' : 'return response from delete member function',
+                'ClaimID' : Claim_id,
+            })
+        except:
+            return JsonResponse({
+                'response' : 'FAIL',
+            })
+
+
 def delete_reward(request):
     try:
         value1 = list(request)
@@ -475,15 +466,88 @@ def chore_completed(request):
     splitValue = stvalue.split("'")
     Chore_id = int(splitValue[1])
     instance = Chores.objects.get(pk=Chore_id)
-    if instance.completed == True:
-        print('changing to false')
-        instance.completed = False
-    else:
-        instance.completed = True
+    instance.completed = True
+    members = Member.objects.filter(chores=Chore_id)
+    for mem in members:
+        print("Before: ", mem.points)
+        mem.points = mem.points + instance.points
+        mem.Currentpoints = mem.Currentpoints + instance.points
+        print("After: ", mem.points)
+        mem.save()
     instance.save()
     return JsonResponse({
         'response' : 'return response from complete chores',
     })
+
+@login_required
+def chores(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
+    mem = Member.objects.get(user = request.user)
+    familyfilter = Family.objects.get(nameofFamily = family_session)
+    chorelist = ChoreList.objects.get(family=familyfilter)
+    rewards = Rewards.objects.filter(chorelist = chorelist)
+    ordered2 = rewards.order_by('pointsNeeded')
+    rewards_serialize= json.loads(serialize('json', ordered2))
+    if mem.userType == "FamilyMember":
+        chores = Chores.objects.filter(assignChoreTo=mem)
+        ordered = chores.order_by('-completed')
+        chores_serialize= json.loads(serialize('json', ordered))
+        mylist = zip(chores_serialize, ordered)
+        claim = ClaimReward.objects.filter(member=mem)
+        context ={
+        'member' : mem,
+        'chores' : mylist,
+        'rewards' : rewards_serialize,
+        'claim' : claim,
+        }
+        return render(request,'mainapp/choresKids.html' ,context)
+    else:
+        chores = Chores.objects.filter(chorelist = chorelist)
+        claim = ClaimReward.objects.filter(chorelist = chorelist)
+        ordered = chores.order_by('completed')
+        chores_serialize= json.loads(serialize('json', ordered))
+        mylist2 = zip(chores_serialize, ordered)
+        context ={
+        'member' : mem,
+        'chores' : mylist2,
+        'rewards' : rewards_serialize,
+        'claim' : claim,
+        }
+        return render(request,'mainapp/choresGuardians.html' ,context)
+
+def claim(request):
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
+    value1 = list(request)
+    stvalue = str(value1)
+    splitValue = stvalue.split("'")
+    RewardID = int(splitValue[1])
+    instance = Rewards.objects.get(pk=RewardID)
+    print(instance)
+    mem = Member.objects.get(user = request.user)
+    points = mem.Currentpoints
+    if(points >= instance.pointsNeeded):
+        claim = ClaimReward(name = instance.name, member=request.user.first_name)
+        claim.save()
+        mem.Currentpoints = mem.Currentpoints - instance.pointsNeeded
+        print("I GET HERE")
+        mem.save()
+        familyfilter = Family.objects.get(nameofFamily = family_session)
+        chorelist = ChoreList.objects.get(family=familyfilter)
+        chorelist.claim.add(claim)
+        chorelist.save()
+        return JsonResponse({
+            'response' : 'CLAIMED',
+        })
+    else:
+        return JsonResponse({
+            'response' : 'YOU NEED MORE POINTS',
+        })
 
 
 @login_required
