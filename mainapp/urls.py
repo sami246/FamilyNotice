@@ -24,38 +24,51 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', LoginView.as_view(template_name = 'mainapp/login.html') , name = 'login'),
     path('logout/', LogoutView.as_view() , name = 'logout'),
+    path('register/', views.register, name="register"),
+    path('current_members/', views.current_members, name="current members"),
+
+    ##List and Task Urls
+    path('lists.json', views.lists_json, name="List of lists"),
     path('todolists/', views.todolist , name = 'todolists'),
     path('tasks/<int:List_id>/', views.tasks , name = 'tasks'),
-    path('lists.json', views.lists_json, name="List of lists"),
     path('createList/', views.create_list, name="create list"),
     path('completed.json', views.complete_status, name="complete status"),
-    path('register/', views.register, name="register"),
+    path('delete_list/<int:List_id>/', views.delete_list, name='delete list'),
+    path('delete_task.json', views.delete_task, name='delete task'),
+
+    ##MealPlanner URLs
     path('mealplanner/', views.meal_planner, name="meal planner"),
     path('addmeal/<slug:meal>', views.addmeal, name="add meal"),
+    path('addmeal2', views.addmeal2, name="add meal 2"),
+    path('deleteMeal.json', views.deleteMeal, name="delete meal"),
+
+    #Chore/Reward URLs
     path('addchore/', views.addchore, name="add chore"),
     path('addreward/', views.addreward, name="add reward"),
-    path('addmeal2', views.addmeal2, name="add meal 2"),
     path('claim', views.claim, name="claim"),
-    path('deleteMeal.json', views.deleteMeal, name="delete meal"),
+    path('delete_chore.json', views.delete_chore, name='delete chore'),
+    path('delete_reward.json', views.delete_reward, name='delete reward'),
+    path('chore_completed.json', views.chore_completed, name='chore completed'),
+    path('chores/', views.chores, name='chores'),
+    path('accept_claim/', views.accept_claim, name='accept claim'),
+
+    ##Choose Family URLs
     path('chooseFamily/', views.choose_family, name="choose family"),
     path('createFamily/', views.create_family, name="create family"),
     path('joinFamily/<int:Fam_id>/', views.join_family, name="join family"),
     path('leave_family/<int:Fam>/', views.leave_family, name="leave family"),
     path('searchKey/', views.search_key, name="search key"),
     path('shareKey/', views.share_key, name="share key"),
-    path('current_members/', views.current_members, name="current members"),
-    path('delete_list/<int:List_id>/', views.delete_list, name='delete list'),
-    path('delete_task.json', views.delete_task, name='delete task'),
-    path('delete_chore.json', views.delete_chore, name='delete chore'),
-    path('delete_reward.json', views.delete_reward, name='delete reward'),
-    path('chore_completed.json', views.chore_completed, name='chore completed'),
+
+    ##Chat URLs
     path('chat/', views.chat, name='chat'),
     path('addMessage/', views.add_message, name='add message'),
-    path('chores/', views.chores, name='chores'),
-    path('accept_claim/', views.accept_claim, name='accept claim'),
+
+    ##Location URLs
     path('findFamily/', views.location, name='location'),
     path('findFamily2/', views.location_of_member, name='location of member'),
 
+    #Calendar URLs
     path('calendar/', viewsCal.get_credentials, name='calendar'),
     path('SignOutGoogle/', viewsCal.SignOutGoogle, name='SignOutGoogle'),
     path('calendarAdd/', viewsCal.create_event, name='calendarAdd'),
