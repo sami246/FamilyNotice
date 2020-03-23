@@ -1,1 +1,1 @@
-web: gunicorn FamilyNotice.wsgi --log-file
+web: gunicorn FamilyNotice.wsgi --log-file -
