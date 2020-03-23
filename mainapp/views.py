@@ -564,7 +564,10 @@ def todolist(request):
 
 @login_required
 def meal_planner(request):
-    family_session = request.session['family_session']
+    try:
+        family_session = request.session['family_session']
+    except:
+        return redirect('choose family')
     familyfilter = Family.objects.get(nameofFamily = family_session)
     meals = MealWeek.objects.get(family = familyfilter)
     context = {
