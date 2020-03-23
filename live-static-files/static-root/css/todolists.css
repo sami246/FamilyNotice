@@ -1,0 +1,72 @@
+.listTile{
+  width: 22vw;
+  height: 17vw;
+  overflow: hidden;
+  cursor: pointer;
+  grid-area: tile;
+  border: 5px solid #87CEFA;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 6px 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.listTile:hover {
+  transform: scale(0.9, 0.9);
+ -webkit-transition: transform 0.5s ease-in-out;
+}
+
+.strikethrough{
+  color: red;
+}
+
+#createNew{
+  border: 5px dashed #87CEFA;
+}
+
+.listTile #short{
+  color: #87CEFA;
+  font-size: 4.2vw;
+}
+
+.listTile #long{
+  color: #87CEFA;
+  font-size: 3.5vw;
+}
+
+
+.To_do_list{
+  display: grid;
+    grid-gap: 3vw;
+    grid-template-columns: repeat(auto-fit, 30%);
+}
+
+@media screen and (max-width: 858px) {
+  .To_do_list{
+    display: grid;
+      grid-gap: 3vw;
+      grid-template-columns: repeat(auto-fit, 100%);
+  }
+
+  .listTile{
+    width: 100%;
+    height: 17vh;
+    overflow: hidden;
+    cursor: pointer;
+    grid-area: tile;
+    border: 7px solid grey;
+    background-color: white;
+
+  }
+
+  .listTile #short{
+    color: #87CEFA;
+    font-size: 7vw;
+    margin: 3vw;
+  }
+
+  .listTile #long{
+    color: #87CEFA;
+    font-size: 5vw;
+    margin: 3vw;
+  }
+}

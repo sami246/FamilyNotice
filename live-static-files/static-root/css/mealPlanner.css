@@ -1,0 +1,129 @@
+body {
+  /* font-family: 'Gochi Hand'; */
+  font-size: 18px;
+  line-height: 1;
+}
+
+table {
+  border: 1px solid #ccc;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 10px;
+  margin: .5em 0 .75em;
+}
+
+/* .MealDay{
+  background-color: grey;
+  color: white;
+} */
+
+.DeleteMealButton{
+  cursor: pointer;
+}
+.BlueNonButton{
+  border: none;
+  background: #4169E1;
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+}
+
+.BlueTop{
+  border: none;
+  background: linear-gradient(180deg,#6495ED ,#4169E1 , #1E90FF);
+  background-size: 200%;
+  color: #fff;
+  outline: grey;
+}
+
+
+.Breakfast:hover {background-color: #b6e1fc;}
+.Breakfast{
+  background-color: #9dd7fb;
+}
+
+.Lunch:hover {background-color: #6cc3f9;}
+.Lunch{
+  background-color: #87cefa;
+}
+
+.Dinner:hover {background-color: #3baff7;}
+.Dinner{
+  background-color: #54b9f8;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+  margin-bottom: .625em;
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background-color: grey;
+  color: white;
+}
+
+@media screen and (max-width: 858px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+}

@@ -1,0 +1,72 @@
+.tile{
+  width: 22vw;
+  height: 17vw;
+  overflow: hidden;
+  cursor: pointer;
+  grid-area: tile;
+  border: 7px solid #1E90FF;
+  background-color: #6495ED;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 6px 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.BlockContent{
+  max-width: 75%;
+  width: 75%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3%;
+}
+
+.tile:hover {
+  transform: scale(0.9, 0.9);
+ -webkit-transition: transform 0.5s ease-in-out;
+}
+
+.tile #short{
+  color: white;
+  /* color: #87CEFA; */
+  font-size: 4.2vw;
+  text-decoration: none;
+}
+
+.tile #long{
+  /* color: #87CEFA; */
+  color: white;
+  font-size: 3.5vw;
+  text-decoration: none;
+}
+
+.indexContainer{
+    display: grid;
+    grid-gap: 3vw;
+    grid-template-columns: repeat(auto-fit, 30%);
+}
+
+@media screen and (max-width: 858px) {
+  .indexContainer{
+    display: grid;
+      grid-gap: 3vw;
+      grid-template-columns: repeat(auto-fit, 100%);
+  }
+
+  .tile{
+    width: 100%;
+    height: 17vh;
+    overflow: hidden;
+    cursor: pointer;
+    grid-area: tile;
+  }
+
+  .tile #short{
+
+    font-size: 7vw;
+    margin: 3vw;
+  }
+
+  .tile #long{
+    font-size: 5vw;
+    margin: 3vw;
+  }
+}
