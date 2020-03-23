@@ -503,7 +503,7 @@ def chores(request):
         'rewards' : rewards_serialize,
         'claim' : claim,
         }
-        return render(request,'mainapp/choresKids.html' ,context)
+        return render(request,'mainapp/ChoresKids.html' ,context)
     else:
         chores = Chores.objects.filter(chorelist = chorelist)
         claim = ClaimReward.objects.filter(chorelist = chorelist)
@@ -516,7 +516,7 @@ def chores(request):
         'rewards' : rewards_serialize,
         'claim' : claim,
         }
-        return render(request,'mainapp/choresGuardians.html' ,context)
+        return render(request,'mainapp/ChoresGuardians.html' ,context)
 
 def claim(request):
     try:
