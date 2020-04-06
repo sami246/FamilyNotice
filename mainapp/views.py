@@ -25,6 +25,7 @@ from django.conf import settings
 #             function(self)
 #             return familyCheck
 
+# Create your views here.
 @login_required
 def index(request):
     context = {

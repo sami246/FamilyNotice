@@ -3,6 +3,7 @@
 {% block content %}
     <div class='BlockContent'>
       <div class="loginPage">
+
          <form class = "login-form" role="form" action = "{% url 'login' %}" method="POST">
             <h3>Please enter your details to login</h3>
             {% csrf_token %}
