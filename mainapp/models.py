@@ -17,12 +17,8 @@ class Member(models.Model):
 	 choices=userType.choices())
 	genderType = models.CharField(max_length = 50,
 	 choices=genderType.choices(), null=True)
-	profilePic = models.ImageField(upload_to = 'static/',
-	 	default = 'static/empty-photo.jpg')
 	points = models.PositiveIntegerField(default="0")
 	Currentpoints = models.PositiveIntegerField(default="0")
-	# tasksCompleted = models.PositiveIntegerField(default="0")
-	# cred = google.oauth2.credentials.Credentials('access_token')
 	long = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	lat = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 	timeOfLocation = models.CharField(max_length = 50,null=True, blank=True)
@@ -96,16 +92,6 @@ class MealDesc(models.Model):
 
 	def __str__(self):
 		return self.text
-
-# class Meal(models.Model):
-# 	mealType = models.CharField(max_length = 50,
-# 	 choices= DaysMeals.choices(), unique=True)
-# 	meal = models.CharField(max_length=30)
-# 	description = models.TextField(blank = True)
-#
-#
-# 	def __str__(self):
-# 		return self.meal + " " + self.mealType
 
 class MealWeek(models.Model):
 	monB = models.OneToOneField(MealDesc, on_delete=models.SET_NULL, related_name="monb", null=True, default=None, unique=False, blank=True)
